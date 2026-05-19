@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 
-// Solo emitimos el evento para que App.vue sepa que debe cambiar la vista
+
 defineEmits(['switch']);
 
 const name = ref('');
@@ -32,7 +32,7 @@ const handleRegister = () => {
       <form @submit.prevent="handleRegister" class="space-y-4">
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre Completo</label>
-          <input type="text" v-model="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF3B30] outline-none transition-all" placeholder="Jael Jimenez" required />
+          <input type="text" v-model="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF3B30] outline-none transition-all" placeholder="Juan Perez" required />
         </div>
 
         <div>

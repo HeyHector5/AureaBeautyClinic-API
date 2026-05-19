@@ -2,10 +2,11 @@
 import { ref } from 'vue';
 import Navbar from './components/Navbar.vue';
 import HeroSection from './components/HeroSection.vue';
-import Login from './components/Login.vue'; // Faltaba esta importación
-import Register from './components/Register.vue'; // Faltaba esta importación
+import Login from './components/Login.vue';
+import Register from './components/Register.vue';
+import Footer from './components/Footer.vue'; 
 
-const currentView = ref('home'); // 'home', 'login', o 'register'
+const currentView = ref('home'); 
 
 // Función para cambiar la vista
 const setView = (v) => {
@@ -14,15 +15,19 @@ const setView = (v) => {
 </script>
 
 <template>
-  <!-- Escuchamos el evento 'change-view' que vendrá del Navbar -->
-  <Navbar @change-view="setView" />
-  
-  <div v-if="currentView === 'home'">
-    <HeroSection />
-    <!-- Aquí puedes agregar más secciones del home luego -->
+  <div class="min-h-screen flex flex-col justify-between bg-gray-50">
+    
+    <Navbar @change-view="setView" />
+    
+    <main class="flex-grow">
+      <div v-if="currentView === 'home'">
+        <HeroSection />
+      </div>
+      <Login v-if="currentView === 'login'" @switch="setView" />
+      <Register v-if="currentView === 'register'" @switch="setView" />
+    </main>
+    
+    <Footer @change-view="setView" /> 
+    
   </div>
-  
-  <!-- Pasamos la función setView para que Login y Register puedan alternar entre ellos -->
-  <Login v-if="currentView === 'login'" @switch="setView" />
-  <Register v-if="currentView === 'register'" @switch="setView" />
 </template>
