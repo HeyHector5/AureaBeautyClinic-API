@@ -43,7 +43,7 @@
         <h4 class="text-white font-bold tracking-widest uppercase text-xs mb-4 text-[#FF3B30]">Contacto</h4>
         <ul class="space-y-2 text-sm text-gray-400">
           <li>📍 Av. Maximo Gomez, Distrito Nacional, RD</li>
-          <li>📞 809-555-0123</li>
+          <li>📞 829-619-8213</li>
           <li>✉️ info@aureabeauty.com</li>
         </ul>
       </div>
