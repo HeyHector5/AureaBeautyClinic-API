@@ -1,0 +1,16 @@
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\bin\Debug\net10.0\AureaBeautyClinic.Data.deps.json
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\bin\Debug\net10.0\AureaBeautyClinic.Data.dll
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\bin\Debug\net10.0\AureaBeautyClinic.Data.pdb
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\bin\Debug\net10.0\AureaBeautyClinic.Shared.dll
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\bin\Debug\net10.0\AureaBeautyClinic.Shared.pdb
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBeautyClinic.Data.csproj.AssemblyReference.cache
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBeautyClinic.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBeautyClinic.Data.AssemblyInfoInputs.cache
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBeautyClinic.Data.AssemblyInfo.cs
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBeautyClinic.Data.csproj.CoreCompileInputs.cache
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBeautyClinic.Data.sourcelink.json
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBea.359B8A97.Up2Date
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBeautyClinic.Data.dll
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\refint\AureaBeautyClinic.Data.dll
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\AureaBeautyClinic.Data.pdb
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Data\obj\Debug\net10.0\ref\AureaBeautyClinic.Data.dll

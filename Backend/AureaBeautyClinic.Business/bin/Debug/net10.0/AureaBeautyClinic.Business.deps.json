@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "AureaBeautyClinic.Business/1.0.0": {
+        "dependencies": {
+          "AureaBeautyClinic.Shared": "1.0.0"
+        },
+        "runtime": {
+          "AureaBeautyClinic.Business.dll": {}
+        }
+      },
+      "AureaBeautyClinic.Shared/1.0.0": {
+        "runtime": {
+          "AureaBeautyClinic.Shared.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AureaBeautyClinic.Business/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AureaBeautyClinic.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

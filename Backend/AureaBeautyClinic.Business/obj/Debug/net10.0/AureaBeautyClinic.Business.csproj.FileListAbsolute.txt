@@ -1,0 +1,16 @@
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\bin\Debug\net10.0\AureaBeautyClinic.Business.deps.json
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\bin\Debug\net10.0\AureaBeautyClinic.Business.dll
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\bin\Debug\net10.0\AureaBeautyClinic.Business.pdb
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\bin\Debug\net10.0\AureaBeautyClinic.Shared.dll
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\bin\Debug\net10.0\AureaBeautyClinic.Shared.pdb
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBeautyClinic.Business.csproj.AssemblyReference.cache
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBeautyClinic.Business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBeautyClinic.Business.AssemblyInfoInputs.cache
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBeautyClinic.Business.AssemblyInfo.cs
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBeautyClinic.Business.csproj.CoreCompileInputs.cache
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBeautyClinic.Business.sourcelink.json
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBea.FCB29F30.Up2Date
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBeautyClinic.Business.dll
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\refint\AureaBeautyClinic.Business.dll
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\AureaBeautyClinic.Business.pdb
+C:\Users\HectorMedina\source\repos\AureaBeautyClinic-API\Backend\AureaBeautyClinic.Business\obj\Debug\net10.0\ref\AureaBeautyClinic.Business.dll

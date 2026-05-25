@@ -1,0 +1,6 @@
+@AureeaBeautyClinic.API_HostAddress = http://localhost:5016
+
+GET {{AureeaBeautyClinic.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

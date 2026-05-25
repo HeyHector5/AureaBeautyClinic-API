@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../AureaBeautyClinic.Business/AureaBeautyClinic.Business.csproj" />
+  <Project Path="../AureaBeautyClinic.Data/AureaBeautyClinic.Data.csproj" />
+  <Project Path="../AureaBeautyClinic.Shared/AureaBeautyClinic.Shared.csproj" />
+  <Project Path="AureaBeautyClinic.API.csproj" />
+</Solution>

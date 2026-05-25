@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "AureaBeautyClinic.Shared/1.0.0": {
+        "runtime": {
+          "AureaBeautyClinic.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AureaBeautyClinic.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
