@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AureaBeautyClinic.Shared.Models
 {
-	public class Role
+	public class Roles
 	{
 		public int RoleID { get; set; }
 		public string Name { get; set; }

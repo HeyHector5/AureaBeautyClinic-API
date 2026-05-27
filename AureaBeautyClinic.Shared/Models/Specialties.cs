@@ -4,11 +4,11 @@ using System.Text;
 
 namespace AureaBeautyClinic.Shared.Models
 {
-	public class Specialty
+	public class Specialties
 	{
 		public int SpecialtyID { get; set; }
 		public string Name { get; set; }
 		public string? Description { get; set; }
-		public bool Active { get; set; }
+		public bool IsActive { get; set; }
 	}
 }

@@ -11,8 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contexts\" />
     <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AureaBeautyClinic.Shared\AureaBeautyClinic.Shared.csproj" />
   </ItemGroup>
 
 </Project>

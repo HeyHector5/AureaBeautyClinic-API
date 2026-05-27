@@ -12,7 +12,7 @@ namespace AureaBeautyClinic.Shared.DTOs
 		public string? LicenseNumber { get; set; }
 		public string? Biography { get; set; }
 		public string? PhotoURL { get; set; }
-		public bool Active { get; set; }
+		public bool IsActive { get; set; }
 
 		public UserDTO User { get; set; }
 		public SpecialtyDTO Specialty { get; set; }
