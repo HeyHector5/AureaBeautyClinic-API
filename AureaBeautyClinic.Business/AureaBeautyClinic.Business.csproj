@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Profiles\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AureaBeautyClinic.Shared\AureaBeautyClinic.Shared.csproj" />
   </ItemGroup>
 
 </Project>
