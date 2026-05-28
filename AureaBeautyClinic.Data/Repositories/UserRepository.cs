@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AureaBeautyClinic.Data.Repositories
 {
-	public class UserRepository : ApplicationContext, IUserRepository
+	public class UserRepository : IUserRepository
 	{
 		private ApplicationContext _context;
 
