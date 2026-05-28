@@ -11,4 +11,9 @@
     <PackageReference Include="Scalar.AspNetCore" Version="2.14.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AureaBeautyClinic.Business\AureaBeautyClinic.Business.csproj" />
+    <ProjectReference Include="..\AureaBeautyClinic.Data\AureaBeautyClinic.Data.csproj" />
+  </ItemGroup>
+
 </Project>

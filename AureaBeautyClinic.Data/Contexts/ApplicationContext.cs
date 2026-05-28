@@ -1,18 +1,17 @@
 ﻿using AureaBeautyClinic.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace AureaBeautyClinic.Data.Contexts
 {
 	public class ApplicationContext : DbContext
 	{
-		public DbSet<Appointments> Appointments; 
-		public DbSet<Doctors> Doctors; 
-		public DbSet<Roles> Roles; 
-		public DbSet<Specialties> Specialties; 
-		public DbSet<Users> Users;
+		protected ApplicationContext() { }
+		public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
+
+		public DbSet<Appointments> Appointments { get; set; }
+		public DbSet<Doctors> Doctors { get; set; }
+		public DbSet<Roles> Roles { get; set; }
+		public DbSet<Specialties> Specialties { get; set; }
+		public DbSet<Users> Users { get; set; }
 	}
 }
