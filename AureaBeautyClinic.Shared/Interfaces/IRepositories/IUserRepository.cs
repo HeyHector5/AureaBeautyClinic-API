@@ -1,4 +1,4 @@
-﻿using AureaBeautyClinic.Shared.Models;
+﻿using AureaBeautyClinic.Shared.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

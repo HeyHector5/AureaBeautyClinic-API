@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AureaBeautyClinic.Shared.Models
+namespace AureaBeautyClinic.Shared.Entities
 {
 	public class Users
 	{

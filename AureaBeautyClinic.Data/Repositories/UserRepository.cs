@@ -1,6 +1,6 @@
 ﻿using AureaBeautyClinic.Data.Contexts;
 using AureaBeautyClinic.Shared.Interfaces.IRepositories;
-using AureaBeautyClinic.Shared.Models;
+using AureaBeautyClinic.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
