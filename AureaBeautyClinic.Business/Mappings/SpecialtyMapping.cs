@@ -5,8 +5,8 @@ namespace AureaBeautyClinic.Business.Mappings
 {
     public static class SpecialtyMapping
     {
-        public static SpecialtyDTO ToDto(this Specialties specialty) => new(
-            specialty.SpecialtyID,
+        public static SpecialtyDTO ToDto(this Specialty specialty) => new(
+            specialty.SpecialtyId,
             specialty.Name,
             specialty.Description,
             specialty.IsActive

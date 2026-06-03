@@ -10,86 +10,86 @@ namespace AureaBeautyClinic.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AppointmentsController : ControllerBase
+    public class AppointmentController : ControllerBase
     {
-        private readonly IAppointmentService _appointmentService;
+        private readonly IAppointmentervice _Appointmentervice;
 
-        public AppointmentsController(IAppointmentService appointmentService)
+        public AppointmentController(IAppointmentervice Appointmentervice)
         {
-            _appointmentService = appointmentService;
+            _Appointmentervice = Appointmentervice;
         }
 
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<AppointmentDTO>>>> GetAll()
         {
-            var appointments = await _appointmentService.GetAllAsync();
-            return Ok(ApiResponse<IEnumerable<AppointmentDTO>>.Ok(appointments));
+            var Appointment = await _Appointmentervice.GetAllAsync();
+            return Ok(ApiResponse<IEnumerable<AppointmentDTO>>.Ok(Appointment));
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ApiResponse<AppointmentDTO>>> GetById(int id)
         {
-            var appointment = await _appointmentService.GetByIdAsync(id);
+            var appointment = await _Appointmentervice.GetByIdAsync(id);
             if (appointment is null)
                 return NotFound(ApiResponse<AppointmentDTO>.Fail($"Appointment with ID {id} was not found."));
 
             return Ok(ApiResponse<AppointmentDTO>.Ok(appointment));
         }
 
-        [HttpGet("user/{userId:int}")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<AppointmentDTO>>>> GetByUser(int userId)
+        [HttpGet("user/{UserId:int}")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<AppointmentDTO>>>> GetByUser(int UserId)
         {
-            var appointments = await _appointmentService.GetByUserIdAsync(userId);
-            return Ok(ApiResponse<IEnumerable<AppointmentDTO>>.Ok(appointments));
+            var Appointment = await _Appointmentervice.GetByUserIdAsync(UserId);
+            return Ok(ApiResponse<IEnumerable<AppointmentDTO>>.Ok(Appointment));
         }
 
-        [HttpGet("doctor/{doctorId:int}")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<AppointmentDTO>>>> GetByDoctor(int doctorId)
+        [HttpGet("doctor/{DoctorId:int}")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<AppointmentDTO>>>> GetByDoctor(int DoctorId)
         {
-            var appointments = await _appointmentService.GetByDoctorIdAsync(doctorId);
-            return Ok(ApiResponse<IEnumerable<AppointmentDTO>>.Ok(appointments));
+            var Appointment = await _Appointmentervice.GetByDoctorIdAsync(DoctorId);
+            return Ok(ApiResponse<IEnumerable<AppointmentDTO>>.Ok(Appointment));
         }
 
         [HttpPost]
         public async Task<ActionResult<ApiResponse<AppointmentDTO>>> Create([FromBody] CreateAppointmentRequest request)
         {
-            var appointment = new Appointments
+            var appointment = new Appointment
             {
-                UserID = request.UserID,
-                DoctorID = request.DoctorID,
+                UserId = request.UserId,
+                DoctorId = request.DoctorId,
                 Scheduled = request.Scheduled,
-                State = AppointmentStatus.Pending,
+                State = Appointmenttatus.Pending,
                 Notes = request.Notes,
                 Created = DateTime.UtcNow
             };
-            var created = await _appointmentService.CreateAsync(appointment);
+            var created = await _Appointmentervice.CreateAsync(appointment);
 
-            return CreatedAtAction(nameof(GetById), new { id = created.appointmentID },
+            return CreatedAtAction(nameof(GetById), new { id = created.AppointmentId },
                 ApiResponse<AppointmentDTO>.Ok(created, "Appointment created successfully."));
         }
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ApiResponse<AppointmentDTO>>> Update(int id, [FromBody] UpdateAppointmentRequest request)
         {
-            var existing = await _appointmentService.GetByIdAsync(id);
+            var existing = await _Appointmentervice.GetByIdAsync(id);
             if (existing is null)
                 return NotFound(ApiResponse<AppointmentDTO>.Fail($"Appointment with ID {id} was not found."));
 
-            var validStates = new[] { AppointmentStatus.Pending, AppointmentStatus.Confirmed, AppointmentStatus.Cancelled, AppointmentStatus.Completed };
+            var validStates = new[] { Appointmenttatus.Pending, Appointmenttatus.Confirmed, Appointmenttatus.Cancelled, Appointmenttatus.Completed };
             if (!validStates.Contains(request.State))
                 return BadRequest(ApiResponse<AppointmentDTO>.Fail($"Invalid state. Valid values are: {string.Join(", ", validStates)}."));
 
-            var appointment = new Appointments
+            var appointment = new Appointment
             {
-                AppointmentID = id,
-                UserID = existing.userID,
-                DoctorID = existing.doctorID,
+                AppointmentId = id,
+                UserId = existing.UserId,
+                DoctorId = existing.DoctorId,
                 Scheduled = request.Scheduled,
                 State = request.State,
                 Notes = request.Notes,
                 Created = existing.created
             };
-            await _appointmentService.UpdateAsync(appointment);
+            await _Appointmentervice.UpdateAsync(appointment);
 
             var updated = existing with { scheduled = request.Scheduled, state = request.State, notes = request.Notes };
             return Ok(ApiResponse<AppointmentDTO>.Ok(updated, "Appointment updated successfully."));

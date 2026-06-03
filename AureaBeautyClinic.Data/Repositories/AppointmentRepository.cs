@@ -14,7 +14,7 @@ namespace AureaBeautyClinic.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Appointments>> GetAllAsync() =>
+        public async Task<IEnumerable<Appointment>> GetAllAsync() =>
             await _context.Appointments
                 .Include(a => a.User)
                     .ThenInclude(u => u.Role)
@@ -22,48 +22,48 @@ namespace AureaBeautyClinic.Data.Repositories
                     .ThenInclude(d => d.Specialty)
                 .ToListAsync();
 
-        public async Task<Appointments?> GetByIdAsync(int appointmentId) =>
+        public async Task<Appointment?> GetByIdAsync(int AppointmentId) =>
             await _context.Appointments
                 .Include(a => a.User)
                     .ThenInclude(u => u.Role)
                 .Include(a => a.Doctor)
                     .ThenInclude(d => d.Specialty)
-                .FirstOrDefaultAsync(a => a.AppointmentID == appointmentId);
+                .FirstOrDefaultAsync(a => a.AppointmentId == AppointmentId);
 
-        public async Task<IEnumerable<Appointments>> GetByUserIdAsync(int userId) =>
+        public async Task<IEnumerable<Appointment>> GetByUserIdAsync(int UserId) =>
             await _context.Appointments
                 .Include(a => a.User)
                     .ThenInclude(u => u.Role)
                 .Include(a => a.Doctor)
                     .ThenInclude(d => d.Specialty)
-                .Where(a => a.UserID == userId)
+                .Where(a => a.UserId == UserId)
                 .ToListAsync();
 
-        public async Task<IEnumerable<Appointments>> GetByDoctorIdAsync(int doctorId) =>
+        public async Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int DoctorId) =>
             await _context.Appointments
                 .Include(a => a.User)
                     .ThenInclude(u => u.Role)
                 .Include(a => a.Doctor)
                     .ThenInclude(d => d.Specialty)
-                .Where(a => a.DoctorID == doctorId)
+                .Where(a => a.DoctorId == DoctorId)
                 .ToListAsync();
 
-        public async Task<Appointments> CreateAsync(Appointments appointment)
+        public async Task<Appointment> CreateAsync(Appointment appointment)
         {
             await _context.Appointments.AddAsync(appointment);
             await _context.SaveChangesAsync();
             return appointment;
         }
 
-        public async Task UpdateAsync(Appointments appointment)
+        public async Task UpdateAsync(Appointment appointment)
         {
             _context.Appointments.Update(appointment);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int appointmentId)
+        public async Task DeleteAsync(int AppointmentId)
         {
-            var appointment = await _context.Appointments.FindAsync(appointmentId);
+            var appointment = await _context.Appointments.FindAsync(AppointmentId);
             if (appointment != null)
             {
                 _context.Appointments.Remove(appointment);

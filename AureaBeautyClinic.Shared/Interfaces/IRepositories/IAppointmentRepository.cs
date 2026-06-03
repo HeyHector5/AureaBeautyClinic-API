@@ -4,11 +4,11 @@ namespace AureaBeautyClinic.Shared.Interfaces.IRepositories
 {
     public interface IAppointmentRepository
     {
-        Task<IEnumerable<Appointments>> GetAllAsync();
-        Task<Appointments?> GetByIdAsync(int appointmentId);
-        Task<IEnumerable<Appointments>> GetByUserIdAsync(int userId);
-        Task<IEnumerable<Appointments>> GetByDoctorIdAsync(int doctorId);
-        Task<Appointments> CreateAsync(Appointments appointment);
-        Task UpdateAsync(Appointments appointment);
+        Task<IEnumerable<Appointment>> GetAllAsync();
+        Task<Appointment?> GetByIdAsync(int AppointmentId);
+        Task<IEnumerable<Appointment>> GetByUserIdAsync(int UserId);
+        Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int DoctorId);
+        Task<Appointment> CreateAsync(Appointment appointment);
+        Task UpdateAsync(Appointment appointment);
     }
 }

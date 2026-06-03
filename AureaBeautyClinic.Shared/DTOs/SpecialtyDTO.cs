@@ -5,7 +5,7 @@ using System.Text;
 namespace AureaBeautyClinic.Shared.DTOs
 {
 	public record SpecialtyDTO(
-		int specialtyID,
+		int SpecialtyId,
 		string name,
 		string? description,
 		bool isActive

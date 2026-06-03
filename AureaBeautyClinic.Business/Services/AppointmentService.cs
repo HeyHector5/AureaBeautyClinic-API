@@ -6,49 +6,46 @@ using AureaBeautyClinic.Shared.Interfaces.IServices;
 
 namespace AureaBeautyClinic.Business.Services
 {
-    public class AppointmentService : IAppointmentService
+    public class Appointmentervice : IAppointmentervice
     {
         private readonly IAppointmentRepository _appointmentRepository;
 
-        public AppointmentService(IAppointmentRepository appointmentRepository)
+        public Appointmentervice(IAppointmentRepository appointmentRepository)
         {
             _appointmentRepository = appointmentRepository;
         }
 
         public async Task<IEnumerable<AppointmentDTO>> GetAllAsync()
         {
-            var appointments = await _appointmentRepository.GetAllAsync();
-            return appointments.Select(a => a.ToDto());
+            var Appointment = await _appointmentRepository.GetAllAsync();
+            return Appointment.Select(a => a.ToDto());
         }
 
-        public async Task<AppointmentDTO?> GetByIdAsync(int appointmentId)
+        public async Task<AppointmentDTO?> GetByIdAsync(int AppointmentId)
         {
-            var appointment = await _appointmentRepository.GetByIdAsync(appointmentId);
+            var appointment = await _appointmentRepository.GetByIdAsync(AppointmentId);
             return appointment?.ToDto();
         }
 
-        public async Task<IEnumerable<AppointmentDTO>> GetByUserIdAsync(int userId)
+        public async Task<IEnumerable<AppointmentDTO>> GetByUserIdAsync(int UserId)
         {
-            var appointments = await _appointmentRepository.GetByUserIdAsync(userId);
-            return appointments.Select(a => a.ToDto());
+            var Appointment = await _appointmentRepository.GetByUserIdAsync(UserId);
+            return Appointment.Select(a => a.ToDto());
         }
 
-        public async Task<IEnumerable<AppointmentDTO>> GetByDoctorIdAsync(int doctorId)
+        public async Task<IEnumerable<AppointmentDTO>> GetByDoctorIdAsync(int DoctorId)
         {
-            var appointments = await _appointmentRepository.GetByDoctorIdAsync(doctorId);
-            return appointments.Select(a => a.ToDto());
+            var Appointment = await _appointmentRepository.GetByDoctorIdAsync(DoctorId);
+            return Appointment.Select(a => a.ToDto());
         }
 
-        public async Task<AppointmentDTO> CreateAsync(Appointments appointment)
+        public async Task<AppointmentDTO> CreateAsync(Appointment appointment)
         {
             var created = await _appointmentRepository.CreateAsync(appointment);
             return created.ToDto();
         }
 
-        public async Task UpdateAsync(Appointments appointment) =>
+        public async Task UpdateAsync(Appointment appointment) =>
             await _appointmentRepository.UpdateAsync(appointment);
-
-        public async Task DeleteAsync(int appointmentId) =>
-            await _appointmentRepository.DeleteAsync(appointmentId);
     }
 }

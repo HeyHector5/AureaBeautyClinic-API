@@ -21,19 +21,19 @@ namespace AureaBeautyClinic.Business.Services
             return roles.Select(r => r.ToDto());
         }
 
-        public async Task<RoleDTO?> GetByIdAsync(int roleId)
+        public async Task<RoleDTO?> GetByIdAsync(int RoleId)
         {
-            var role = await _roleRepository.GetByIdAsync(roleId);
+            var role = await _roleRepository.GetByIdAsync(RoleId);
             return role?.ToDto();
         }
 
-        public async Task<RoleDTO> CreateAsync(Roles role)
+        public async Task<RoleDTO> CreateAsync(Role role)
         {
             var created = await _roleRepository.CreateAsync(role);
             return created.ToDto();
         }
 
-        public async Task UpdateAsync(Roles role) =>
+        public async Task UpdateAsync(Role role) =>
             await _roleRepository.UpdateAsync(role);
     }
 }

@@ -14,28 +14,28 @@ namespace AureaBeautyClinic.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Roles>> GetAllAsync() =>
+        public async Task<IEnumerable<Role>> GetAllAsync() =>
             await _context.Roles.ToListAsync();
 
-        public async Task<Roles?> GetByIdAsync(int roleId) =>
-            await _context.Roles.FindAsync(roleId);
+        public async Task<Role?> GetByIdAsync(int RoleId) =>
+            await _context.Roles.FindAsync(RoleId);
 
-        public async Task<Roles> CreateAsync(Roles role)
+        public async Task<Role> CreateAsync(Role role)
         {
             await _context.Roles.AddAsync(role);
             await _context.SaveChangesAsync();
             return role;
         }
 
-        public async Task UpdateAsync(Roles role)
+        public async Task UpdateAsync(Role role)
         {
             _context.Roles.Update(role);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int roleId)
+        public async Task DeleteAsync(int RoleId)
         {
-            var role = await _context.Roles.FindAsync(roleId);
+            var role = await _context.Roles.FindAsync(RoleId);
             if (role != null)
             {
                 _context.Roles.Remove(role);

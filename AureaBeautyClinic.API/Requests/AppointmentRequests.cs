@@ -4,11 +4,11 @@ namespace AureaBeautyClinic.API.Requests
 {
     public class CreateAppointmentRequest
     {
-        [Required(ErrorMessage = "UserID is required.")]
-        public int UserID { get; set; }
+        [Required(ErrorMessage = "UserId is required.")]
+        public int UserId { get; set; }
 
-        [Required(ErrorMessage = "DoctorID is required.")]
-        public int DoctorID { get; set; }
+        [Required(ErrorMessage = "DoctorId is required.")]
+        public int DoctorId { get; set; }
 
         [Required(ErrorMessage = "Scheduled date is required.")]
         public DateTime Scheduled { get; set; }

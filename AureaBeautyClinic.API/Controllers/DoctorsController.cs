@@ -38,10 +38,10 @@ namespace AureaBeautyClinic.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<DoctorDTO>>> Create([FromBody] CreateDoctorRequest request)
         {
-            var doctor = new Doctors
+            var doctor = new Doctor
             {
-                UserID = request.UserID,
-                SpecialtyID = request.SpecialtyID,
+                UserId = request.UserId,
+                SpecialtyId = request.SpecialtyId,
                 LicenseNumber = request.LicenseNumber,
                 Biography = request.Biography,
                 PhotoURL = request.PhotoURL,
@@ -49,7 +49,7 @@ namespace AureaBeautyClinic.API.Controllers
             };
             var created = await _doctorService.CreateAsync(doctor);
 
-            return CreatedAtAction(nameof(GetById), new { id = created.doctorID },
+            return CreatedAtAction(nameof(GetById), new { id = created.DoctorId },
                 ApiResponse<DoctorDTO>.Ok(created, "Doctor created successfully."));
         }
 
@@ -60,11 +60,11 @@ namespace AureaBeautyClinic.API.Controllers
             if (existing is null)
                 return NotFound(ApiResponse<DoctorDTO>.Fail($"Doctor with ID {id} was not found."));
 
-            var doctor = new Doctors
+            var doctor = new Doctor
             {
-                DoctorID = id,
-                UserID = existing.userID,
-                SpecialtyID = request.SpecialtyID,
+                DoctorId = id,
+                UserId = existing.UserId,
+                SpecialtyId = request.SpecialtyId,
                 LicenseNumber = request.LicenseNumber,
                 Biography = request.Biography,
                 PhotoURL = request.PhotoURL,
@@ -74,7 +74,7 @@ namespace AureaBeautyClinic.API.Controllers
 
             var updated = existing with
             {
-                specialtyID = request.SpecialtyID,
+                SpecialtyId = request.SpecialtyId,
                 licenseNumber = request.LicenseNumber,
                 biography = request.Biography,
                 photoURL = request.PhotoURL,

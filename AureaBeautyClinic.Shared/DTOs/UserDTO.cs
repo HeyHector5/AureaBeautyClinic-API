@@ -5,12 +5,11 @@ using System.Text;
 namespace AureaBeautyClinic.Shared.DTOs
 {
 	public record UserDTO(
-		int userID,
-		int roleID,
+		int UserId,
+		int RoleId,
 		string name,
 		string lastName,
 		string email,
-		byte[] passwordHash,
 		string? phoneNumber,
 		DateTime registerDate,
 		bool isActive,

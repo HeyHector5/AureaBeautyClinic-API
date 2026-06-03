@@ -14,26 +14,31 @@ namespace AureaBeautyClinic.Data.Repositories
 			_context = context;
 		}
 
-		public async Task<IEnumerable<Users>> GetAllAsync() =>
+		public async Task<IEnumerable<User>> GetAllAsync() =>
 			await _context.Users
 				.Include(u => u.Role)
 				.ToListAsync();
 
-		public async Task<Users?> GetByIdAsync(int userId) =>
+		public async Task<User?> GetByIdAsync(int UserId) =>
 			await _context.Users
 				.Include(u => u.Role)
-				.FirstOrDefaultAsync(u => u.UserID == userId);
+				.FirstOrDefaultAsync(u => u.UserId == UserId);
 
-		public async Task<Users> CreateUserAsync(Users user)
+		public async Task<User?> GetByEmailAsync(string email) =>
+			await _context.Users
+				.Include(u => u.Role)
+				.FirstOrDefaultAsync(u => u.Email == email);
+
+		public async Task<User> CreateUserAsync(User user)
 		{
 			await _context.Users.AddAsync(user);
 			await _context.SaveChangesAsync();
 			return user;
 		}
 
-		public async Task UpdateUserAsync(int userId)
+		public async Task UpdateUserAsync(int UserId)
 		{
-			var user = await _context.Users.FindAsync(userId);
+			var user = await _context.Users.FindAsync(UserId);
 			if (user != null)
 			{
 				_context.Users.Update(user);
@@ -41,13 +46,13 @@ namespace AureaBeautyClinic.Data.Repositories
 			}
 		}
 
-		public async Task UpdateAsync(Users user)
+		public async Task UpdateAsync(User user)
 		{
 			_context.Users.Update(user);
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task<bool> ExistsAsync(Users user) =>
+		public async Task<bool> ExistsAsync(User user) =>
 			await _context.Users.AnyAsync(u => u.Email == user.Email);
 	}
 }

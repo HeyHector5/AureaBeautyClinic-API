@@ -38,7 +38,7 @@ namespace AureaBeautyClinic.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<SpecialtyDTO>>> Create([FromBody] CreateSpecialtyRequest request)
         {
-            var specialty = new Specialties
+            var specialty = new Specialty
             {
                 Name = request.Name,
                 Description = request.Description,
@@ -46,7 +46,7 @@ namespace AureaBeautyClinic.API.Controllers
             };
             var created = await _specialtyService.CreateAsync(specialty);
 
-            return CreatedAtAction(nameof(GetById), new { id = created.specialtyID },
+            return CreatedAtAction(nameof(GetById), new { id = created.SpecialtyId },
                 ApiResponse<SpecialtyDTO>.Ok(created, "Specialty created successfully."));
         }
 
@@ -57,9 +57,9 @@ namespace AureaBeautyClinic.API.Controllers
             if (existing is null)
                 return NotFound(ApiResponse<SpecialtyDTO>.Fail($"Specialty with ID {id} was not found."));
 
-            var specialty = new Specialties
+            var specialty = new Specialty
             {
-                SpecialtyID = id,
+                SpecialtyId = id,
                 Name = request.Name,
                 Description = request.Description,
                 IsActive = request.IsActive

@@ -5,7 +5,7 @@ using System.Text;
 namespace AureaBeautyClinic.Shared.DTOs
 {
 	public record RoleDTO(
-		int roleID,
+		int RoleId,
 		string name,
 		string? description
 	);

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AureaBeautyClinic.Shared.Constants
 {
-	public static class AppointmentStatus
+	public static class Appointmenttatus
 	{
 		public const string Pending = "Pending";
 		public const string Confirmed = "Confirmed";

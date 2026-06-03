@@ -4,9 +4,9 @@ namespace AureaBeautyClinic.Shared.Interfaces.IRepositories
 {
     public interface ISpecialtyRepository
     {
-        Task<IEnumerable<Specialties>> GetAllAsync();
-        Task<Specialties?> GetByIdAsync(int specialtyId);
-        Task<Specialties> CreateAsync(Specialties specialty);
-        Task UpdateAsync(Specialties specialty);
+        Task<IEnumerable<Specialty>> GetAllAsync();
+        Task<Specialty?> GetByIdAsync(int SpecialtyId);
+        Task<Specialty> CreateAsync(Specialty specialty);
+        Task UpdateAsync(Specialty specialty);
     }
 }

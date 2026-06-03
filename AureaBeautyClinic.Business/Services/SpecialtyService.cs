@@ -21,19 +21,19 @@ namespace AureaBeautyClinic.Business.Services
             return specialties.Select(s => s.ToDto());
         }
 
-        public async Task<SpecialtyDTO?> GetByIdAsync(int specialtyId)
+        public async Task<SpecialtyDTO?> GetByIdAsync(int SpecialtyId)
         {
-            var specialty = await _specialtyRepository.GetByIdAsync(specialtyId);
+            var specialty = await _specialtyRepository.GetByIdAsync(SpecialtyId);
             return specialty?.ToDto();
         }
 
-        public async Task<SpecialtyDTO> CreateAsync(Specialties specialty)
+        public async Task<SpecialtyDTO> CreateAsync(Specialty specialty)
         {
             var created = await _specialtyRepository.CreateAsync(specialty);
             return created.ToDto();
         }
 
-        public async Task UpdateAsync(Specialties specialty) =>
+        public async Task UpdateAsync(Specialty specialty) =>
             await _specialtyRepository.UpdateAsync(specialty);
     }
 }

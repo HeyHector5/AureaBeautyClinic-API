@@ -6,8 +6,8 @@ namespace AureaBeautyClinic.Shared.Interfaces.IServices
     public interface IDoctorService
     {
         Task<IEnumerable<DoctorDTO>> GetAllAsync();
-        Task<DoctorDTO?> GetByIdAsync(int doctorId);
-        Task<DoctorDTO> CreateAsync(Doctors doctor);
-        Task UpdateAsync(Doctors doctor);
+        Task<DoctorDTO?> GetByIdAsync(int DoctorId);
+        Task<DoctorDTO> CreateAsync(Doctor doctor);
+        Task UpdateAsync(Doctor doctor);
     }
 }

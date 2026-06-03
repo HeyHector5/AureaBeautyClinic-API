@@ -4,9 +4,9 @@ namespace AureaBeautyClinic.Shared.Interfaces.IRepositories
 {
     public interface IDoctorRepository
     {
-        Task<IEnumerable<Doctors>> GetAllAsync();
-        Task<Doctors?> GetByIdAsync(int doctorId);
-        Task<Doctors> CreateAsync(Doctors doctor);
-        Task UpdateAsync(Doctors doctor);
+        Task<IEnumerable<Doctor>> GetAllAsync();
+        Task<Doctor?> GetByIdAsync(int DoctorId);
+        Task<Doctor> CreateAsync(Doctor doctor);
+        Task UpdateAsync(Doctor doctor);
     }
 }

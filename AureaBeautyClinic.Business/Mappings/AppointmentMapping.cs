@@ -5,10 +5,10 @@ namespace AureaBeautyClinic.Business.Mappings
 {
     public static class AppointmentMapping
     {
-        public static AppointmentDTO ToDto(this Appointments appointment) => new(
-            appointment.AppointmentID,
-            appointment.UserID,
-            appointment.DoctorID,
+        public static AppointmentDTO ToDto(this Appointment appointment) => new(
+            appointment.AppointmentId,
+            appointment.UserId,
+            appointment.DoctorId,
             appointment.Scheduled,
             appointment.State,
             appointment.Notes,

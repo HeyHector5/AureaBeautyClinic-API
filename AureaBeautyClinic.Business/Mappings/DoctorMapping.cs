@@ -5,10 +5,10 @@ namespace AureaBeautyClinic.Business.Mappings
 {
     public static class DoctorMapping
     {
-        public static DoctorDTO ToDto(this Doctors doctor) => new(
-            doctor.DoctorID,
-            doctor.UserID,
-            doctor.SpecialtyID,
+        public static DoctorDTO ToDto(this Doctor doctor) => new(
+            doctor.DoctorId,
+            doctor.UserId,
+            doctor.SpecialtyId,
             doctor.LicenseNumber,
             doctor.Biography,
             doctor.PhotoURL,

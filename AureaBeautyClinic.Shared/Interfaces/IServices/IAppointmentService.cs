@@ -3,13 +3,13 @@ using AureaBeautyClinic.Shared.Entities;
 
 namespace AureaBeautyClinic.Shared.Interfaces.IServices
 {
-    public interface IAppointmentService
+    public interface IAppointmentervice
     {
         Task<IEnumerable<AppointmentDTO>> GetAllAsync();
-        Task<AppointmentDTO?> GetByIdAsync(int appointmentId);
-        Task<IEnumerable<AppointmentDTO>> GetByUserIdAsync(int userId);
-        Task<IEnumerable<AppointmentDTO>> GetByDoctorIdAsync(int doctorId);
-        Task<AppointmentDTO> CreateAsync(Appointments appointment);
-        Task UpdateAsync(Appointments appointment);
+        Task<AppointmentDTO?> GetByIdAsync(int AppointmentId);
+        Task<IEnumerable<AppointmentDTO>> GetByUserIdAsync(int UserId);
+        Task<IEnumerable<AppointmentDTO>> GetByDoctorIdAsync(int DoctorId);
+        Task<AppointmentDTO> CreateAsync(Appointment appointment);
+        Task UpdateAsync(Appointment appointment);
     }
 }

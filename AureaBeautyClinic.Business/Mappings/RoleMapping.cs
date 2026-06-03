@@ -5,8 +5,8 @@ namespace AureaBeautyClinic.Business.Mappings
 {
     public static class RoleMapping
     {
-        public static RoleDTO ToDto(this Roles role) => new(
-            role.RoleID,
+        public static RoleDTO ToDto(this Role role) => new(
+            role.RoleId,
             role.Name,
             role.Description
         );

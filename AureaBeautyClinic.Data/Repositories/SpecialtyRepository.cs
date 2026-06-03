@@ -14,28 +14,28 @@ namespace AureaBeautyClinic.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Specialties>> GetAllAsync() =>
+        public async Task<IEnumerable<Specialty>> GetAllAsync() =>
             await _context.Specialties.ToListAsync();
 
-        public async Task<Specialties?> GetByIdAsync(int specialtyId) =>
-            await _context.Specialties.FindAsync(specialtyId);
+        public async Task<Specialty?> GetByIdAsync(int SpecialtyId) =>
+            await _context.Specialties.FindAsync(SpecialtyId);
 
-        public async Task<Specialties> CreateAsync(Specialties specialty)
+        public async Task<Specialty> CreateAsync(Specialty specialty)
         {
             await _context.Specialties.AddAsync(specialty);
             await _context.SaveChangesAsync();
             return specialty;
         }
 
-        public async Task UpdateAsync(Specialties specialty)
+        public async Task UpdateAsync(Specialty specialty)
         {
             _context.Specialties.Update(specialty);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int specialtyId)
+        public async Task DeleteAsync(int SpecialtyId)
         {
-            var specialty = await _context.Specialties.FindAsync(specialtyId);
+            var specialty = await _context.Specialties.FindAsync(SpecialtyId);
             if (specialty != null)
             {
                 _context.Specialties.Remove(specialty);

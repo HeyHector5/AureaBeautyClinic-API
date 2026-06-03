@@ -5,9 +5,9 @@ using System.Text;
 namespace AureaBeautyClinic.Shared.DTOs
 {
 	public record DoctorDTO(
-		int doctorID,
-		int userID,
-		int specialtyID,
+		int DoctorId,
+		int UserId,
+		int SpecialtyId,
 		string? licenseNumber,
 		string? biography,
 		string? photoURL,

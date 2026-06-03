@@ -5,15 +5,14 @@ namespace AureaBeautyClinic.Business.Mappings
 {
     public static class UserMapping
     {
-        public static UserDTO ToDto(this Users user) => new(
-            user.UserID,
-            user.RoleID,
-            user.Name,
+        public static UserDTO ToDto(this User user) => new(
+            user.UserId,
+            user.RoleId,
+            user.FirstName,
             user.LastName,
             user.Email,
-            user.PasswordHash,
             user.Phone,
-            user.RegisterDate,
+            user.Registered,
             user.IsActive,
             user.Role.ToDto()
         );

@@ -4,11 +4,11 @@ namespace AureaBeautyClinic.API.Requests
 {
     public class CreateDoctorRequest
     {
-        [Required(ErrorMessage = "UserID is required.")]
-        public int UserID { get; set; }
+        [Required(ErrorMessage = "UserId is required.")]
+        public int UserId { get; set; }
 
-        [Required(ErrorMessage = "SpecialtyID is required.")]
-        public int SpecialtyID { get; set; }
+        [Required(ErrorMessage = "SpecialtyId is required.")]
+        public int SpecialtyId { get; set; }
 
         [StringLength(50, ErrorMessage = "LicenseNumber cannot exceed 50 characters.")]
         public string? LicenseNumber { get; set; }
@@ -24,8 +24,8 @@ namespace AureaBeautyClinic.API.Requests
 
     public class UpdateDoctorRequest
     {
-        [Required(ErrorMessage = "SpecialtyID is required.")]
-        public int SpecialtyID { get; set; }
+        [Required(ErrorMessage = "SpecialtyId is required.")]
+        public int SpecialtyId { get; set; }
 
         [StringLength(50, ErrorMessage = "LicenseNumber cannot exceed 50 characters.")]
         public string? LicenseNumber { get; set; }

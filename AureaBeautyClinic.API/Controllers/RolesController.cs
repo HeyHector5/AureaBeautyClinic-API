@@ -38,10 +38,10 @@ namespace AureaBeautyClinic.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<RoleDTO>>> Create([FromBody] CreateRoleRequest request)
         {
-            var role = new Roles { Name = request.Name, Description = request.Description };
+            var role = new Role { Name = request.Name, Description = request.Description };
             var created = await _roleService.CreateAsync(role);
 
-            return CreatedAtAction(nameof(GetById), new { id = created.roleID },
+            return CreatedAtAction(nameof(GetById), new { id = created.RoleId },
                 ApiResponse<RoleDTO>.Ok(created, "Role created successfully."));
         }
 
@@ -52,7 +52,7 @@ namespace AureaBeautyClinic.API.Controllers
             if (existing is null)
                 return NotFound(ApiResponse<RoleDTO>.Fail($"Role with ID {id} was not found."));
 
-            var role = new Roles { RoleID = id, Name = request.Name, Description = request.Description };
+            var role = new Role { RoleId = id, Name = request.Name, Description = request.Description };
             await _roleService.UpdateAsync(role);
 
             var updated = existing with { name = request.Name, description = request.Description };

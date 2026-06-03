@@ -6,9 +6,9 @@ using System.Text;
 namespace AureaBeautyClinic.Shared.DTOs
 {
 	public record AppointmentDTO(
-		int appointmentID,
-		int userID,
-		int doctorID,
+		int AppointmentId,
+		int UserId,
+		int DoctorId,
 		DateTime scheduled,
 		string state,
 		string? notes,
