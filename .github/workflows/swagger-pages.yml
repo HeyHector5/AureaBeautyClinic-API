@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'Backend/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -34,6 +35,10 @@ jobs:
       - name: Restore tools
         working-directory: Backend
         run: dotnet tool restore
+
+      - name: Restore packages
+        working-directory: Backend
+        run: dotnet restore AureaBeautyClinic.API/AureaBeautyClinic.API.csproj
 
       - name: Build
         working-directory: Backend
