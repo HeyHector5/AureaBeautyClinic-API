@@ -1,0 +1,65 @@
+name: Publish Swagger to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Backend/**'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore tools
+        working-directory: Backend
+        run: dotnet tool restore
+
+      - name: Build
+        working-directory: Backend
+        run: dotnet build AureaBeautyClinic.API/AureaBeautyClinic.API.csproj -c Release --no-restore
+
+      - name: Generate swagger.json
+        working-directory: Backend
+        env:
+          ConnectionStrings__ConnString: "Server=localhost;Database=AureaBeautyClinic;User ID=sa;Password=Placeholder1!;"
+          Jwt__Key: "placeholder-jwt-key-for-swagger-generation-only-not-used-in-prod"
+          Jwt__Issuer: "AureaBeautyClinic.API"
+          Jwt__Audience: "AureaBeautyClinic.Client"
+        run: |
+          dotnet swagger tofile \
+            --output ../docs/swagger.json \
+            AureaBeautyClinic.API/bin/Release/net10.0/AureaBeautyClinic.API.dll \
+            v1
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
