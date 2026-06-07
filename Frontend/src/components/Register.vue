@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { register } from '@/Services/authService'
+import { register } from '@/services/authService'
 import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2' // 1. Importamos SweetAlert2
 
