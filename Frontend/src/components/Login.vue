@@ -31,9 +31,10 @@
 
         <button 
           type="submit"
-          class="w-full bg-[#FF3B30] hover:bg-[#e0342a] text-white font-bold py-3 rounded-lg transition-colors cursor-pointer shadow-lg"
+          :disabled="loading"
+          class="w-full bg-[#FF3B30] hover:bg-[#e0342a] text-white font-bold py-3 rounded-lg transition-colors cursor-pointer shadow-lg disabled:opacity-50"
         >
-          Iniciar Sesión
+          {{ loading ? 'Cargando...' : 'Iniciar Sesión' }}
         </button>
       </form>
 
@@ -46,13 +47,75 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
+import { login } from '../Services/authService'
+import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2' // 1. Importamos SweetAlert2
 
-const email = ref('');
-const password = ref('');
+const email    = ref('')
+const password = ref('')
+const loading  = ref(false)
+const router   = useRouter()
 
-const handleLogin = () => {
-  console.log("Login intentado con:", email.value);
-  //Backkend
-};
+// Quitamos la variable reactiva 'error' porque ahora manejaremos los mensajes con SweetAlert2
+
+const handleLogin = async () => {
+  console.log('handleLogin ejecutado', email.value, password.value)
+  loading.value = true
+
+  try {
+    const res = await login(email.value, password.value)
+    console.log('Respuesta API:', res)
+
+    if (!res.success) {
+      // 2. Alerta elegante si las credenciales fallan o la API devuelve éxito falso
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de Autenticación',
+        text: res.message || 'Credenciales incorrectas, verifica tus datos.',
+        confirmButtonColor: '#FF3B30', // El rojo coral de tu marca
+      })
+      return
+    }
+
+    // Guarda el token y el usuario en LocalStorage
+    localStorage.setItem('token', res.data.token)
+
+    const user = res.data.user
+      ? {
+          ...res.data.user,
+          role: res.data.user.role?.name ?? res.data.user.role ?? 'User'
+        }
+      : { email: email.value, role: 'User' }
+
+    localStorage.setItem('user', JSON.stringify(user))
+
+    // 3. Ventana de éxito estilizada antes de redirigir al Dashboard / Admin
+    Swal.fire({
+      icon: 'success',
+      title: '¡Bienvenido de vuelta!',
+      text: 'Sesión iniciada correctamente.',
+      showConfirmButton: false,
+      timer: 2000, // Se cierra sola en 2 segundos
+      timerProgressBar: true,
+    }).then(() => {
+      // Redirige justo después de que la alerta se cierre
+      if (user.role === 'Admin') router.push('/admin')
+      else router.push('/dashboard')
+    })
+
+  } catch (e) {
+    console.log('Error:', e)
+    
+    // 4. Alerta si hay un desplome en el servidor o caída de internet
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de conexión',
+      text: 'No pudimos conectar con el servidor. Por favor, intenta más tarde.',
+      confirmButtonColor: '#FF3B30',
+    })
+  } finally {
+    loading.value = false
+  }
+}
 </script>
