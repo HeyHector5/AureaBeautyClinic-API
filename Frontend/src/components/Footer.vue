@@ -16,11 +16,7 @@
         <h4 class="text-white font-bold tracking-widest uppercase text-xs mb-4 text-[#FF3B30]">Navegación</h4>
         <ul class="space-y-2 text-sm">
           <li>
-           
-            <button 
-              @click.prevent="$emit('change-view', 'home')" 
-              class="hover:text-white transition-colors cursor-pointer text-left bg-transparent border-none p-0 outline-none"
-            >
+            <button @click="router.push('/')" class="hover:text-white transition-colors cursor-pointer text-left bg-transparent border-none p-0 outline-none">
               Inicio
             </button>
           </li>
@@ -58,5 +54,6 @@
 </template>
 
 <script setup>
-defineEmits(['change-view']);
+import { useRouter } from 'vue-router'
+const router = useRouter()
 </script>
