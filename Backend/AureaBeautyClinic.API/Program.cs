@@ -46,6 +46,19 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// CORS
+const string CorsPolicyName = "AllowFrontend";
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? new[] { "http://localhost:5173" };
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CorsPolicyName, policy =>
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
+
 // Database
 var connString = builder.Configuration.GetConnectionString("ConnString");
 builder.Services.AddDbContext<ApplicationContext>(options =>
@@ -124,6 +137,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseCors(CorsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
