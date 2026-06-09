@@ -62,7 +62,14 @@ builder.Services.AddCors(options =>
 // Database
 var connString = builder.Configuration.GetConnectionString("ConnString");
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseSqlServer(connString));
+    options.UseSqlServer(connString, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null);
+        sqlOptions.CommandTimeout(60);
+    }));
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
