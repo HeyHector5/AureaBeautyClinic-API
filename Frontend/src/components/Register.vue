@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { register } from '@/services/authService'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import Swal from 'sweetalert2' // 1. Importamos SweetAlert2
 
 const router = useRouter()
+const route = useRoute()
 
 const name = ref('')
 const lastName = ref('')
@@ -54,8 +55,8 @@ const handleRegister = async () => {
       allowOutsideClick: false, // Evita que cierren el modal haciendo clic fuera
     }).then((result) => {
       if (result.isConfirmed) {
-        // Redirección fluida mediante el router al Login
-        router.push('/login')
+        // Redirección fluida mediante el router al Login, preservando a dónde volver tras iniciar sesión
+        router.push({ path: '/login', query: route.query })
       }
     })
 
@@ -81,6 +82,13 @@ const handleRegister = async () => {
         <h2 class="text-3xl font-bold text-gray-800 tracking-tighter">Crea tu Cuenta</h2>
         <p class="text-gray-500 mt-2 text-sm">Únete a la experiencia de Aurea Beauty</p>
       </div>
+
+      <p
+        v-if="route.query.redirect"
+        class="mb-6 text-sm text-center text-[#FF3B30] bg-red-50 border border-red-100 rounded-lg py-2 px-3"
+      >
+        Crea tu cuenta para reservar tu cita
+      </p>
 
       <form @submit.prevent="handleRegister" class="space-y-4">
 
@@ -141,7 +149,7 @@ const handleRegister = async () => {
 
       <p class="text-center mt-8 text-sm text-gray-600">
         ¿Ya tienes una cuenta?
-        <button @click="router.push('/login')" class="text-[#FF3B30] font-bold hover:underline cursor-pointer ml-1">
+        <button @click="router.push({ path: '/login', query: route.query })" class="text-[#FF3B30] font-bold hover:underline cursor-pointer ml-1">
           Inicia sesión aquí
         </button>
       </p>

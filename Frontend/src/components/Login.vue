@@ -6,6 +6,13 @@
         <p class="text-gray-500 mt-2">Ingresa a tu cuenta de Aurea Beauty</p>
       </div>
 
+      <p
+        v-if="route.query.redirect"
+        class="mb-6 text-sm text-center text-[#FF3B30] bg-red-50 border border-red-100 rounded-lg py-2 px-3"
+      >
+        Debes iniciar sesión para reservar tu cita
+      </p>
+
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
@@ -40,7 +47,7 @@
 
       <p class="text-center mt-6 text-sm text-gray-600">
         ¿No tienes una cuenta? 
-        <a href="#" @click.prevent="$emit('switch', 'register')" class="text-[#FF3B30] font-bold hover:underline cursor-pointer">Regístrate aquí</a>
+        <a href="#" @click.prevent="router.push({ path: '/register', query: route.query })" class="text-[#FF3B30] font-bold hover:underline cursor-pointer">Regístrate aquí</a>
       </p>
     </div>
   </div>
@@ -49,13 +56,14 @@
 <script setup>
 import { ref } from 'vue'
 import { login } from '../services/authService'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import Swal from 'sweetalert2' // 1. Importamos SweetAlert2
 
 const email    = ref('')
 const password = ref('')
 const loading  = ref(false)
 const router   = useRouter()
+const route    = useRoute()
 
 // Quitamos la variable reactiva 'error' porque ahora manejaremos los mensajes con SweetAlert2
 
@@ -100,7 +108,9 @@ const handleLogin = async () => {
       timerProgressBar: true,
     }).then(() => {
       // Redirige justo después de que la alerta se cierre
-      if (user.role === 'Admin') router.push('/admin')
+      const redirect = route.query.redirect
+      if (redirect) router.push(redirect)
+      else if (user.role === 'Admin') router.push('/admin')
       else router.push('/dashboard')
     })
 

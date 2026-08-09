@@ -49,6 +49,14 @@
             <p class="text-sm font-bold text-gray-800">{{ user.name }} {{ user.lastName }}</p>
             <p class="text-xs text-gray-500">{{ user.role }}</p>
           </div>
+          <template v-if="user.role === 'Admin'">
+            <a href="#"
+               @click.prevent="router.push('/admin'); isDropdownOpen = false"
+               class="block px-4 py-2 mt-1 text-sm font-bold text-[#FF3B30] hover:bg-red-50 cursor-pointer">
+              ⚙️ Panel de administración
+            </a>
+            <hr class="my-2 border-gray-100">
+          </template>
           <a href="#" class="block px-4 py-2 mt-1 text-sm text-gray-700 hover:bg-red-50 hover:text-[#FF3B30] cursor-pointer">Mis Reservas</a>
           <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-[#FF3B30] cursor-pointer">Historial</a>
           <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-[#FF3B30] cursor-pointer">Mi Perfil</a>
