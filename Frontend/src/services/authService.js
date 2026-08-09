@@ -1,4 +1,4 @@
-const USE_MOCK = false
+const USE_MOCK = true
 const BASE_URL = 'https://aureabeautyclinicapi-gwdrcbg5d9e3fxf4.westus3-01.azurewebsites.net'
 
 // ── MOCK LOGIN ──────────────────────────────────────────
