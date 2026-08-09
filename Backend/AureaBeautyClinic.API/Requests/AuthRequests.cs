@@ -4,8 +4,8 @@ namespace AureaBeautyClinic.API.Requests
 {
     public class RegisterRequest
     {
-        [Required(ErrorMessage = "RoleId is required.")]
-        public int RoleId { get; set; }
+        // Sin RoleId a propósito: el registro público siempre crea un paciente.
+        // Aceptarlo permitiría que cualquiera se auto-asignara el rol Admin.
 
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 100 characters.")]

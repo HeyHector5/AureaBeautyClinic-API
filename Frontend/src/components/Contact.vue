@@ -1,8 +1,68 @@
+<script setup>
+import { computed, onMounted, reactive, ref } from 'vue'
+import { getSpecialties } from '@/services/specialtyService'
+import { CLINIC } from '@/constants/clinic'
+
+/**
+ * No existe un endpoint de contacto en la API. En vez de simular un envío que
+ * nunca ocurre, el formulario compone un correo (o un mensaje de WhatsApp) real
+ * con los datos que la persona escribió.
+ */
+
+const formulario = reactive({
+  nombre: '',
+  telefono: '',
+  correo: '',
+  servicio: '',
+  mensaje: ''
+})
+
+const especialidades = ref([])
+
+const cuerpoMensaje = computed(() =>
+  [
+    `Nombre: ${formulario.nombre}`,
+    formulario.telefono ? `Teléfono: ${formulario.telefono}` : null,
+    `Correo: ${formulario.correo}`,
+    formulario.servicio ? `Servicio de interés: ${formulario.servicio}` : null,
+    '',
+    formulario.mensaje || '(Sin mensaje adicional)'
+  ]
+    .filter((line) => line !== null)
+    .join('\n')
+)
+
+const mailtoHref = computed(() => {
+  const asunto = formulario.servicio
+    ? `Consulta sobre ${formulario.servicio}`
+    : 'Consulta desde el sitio web'
+  return `mailto:${CLINIC.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoMensaje.value)}`
+})
+
+const whatsappHref = computed(
+  () => `https://wa.me/${CLINIC.whatsapp}?text=${encodeURIComponent(cuerpoMensaje.value)}`
+)
+
+const enviarPorCorreo = () => {
+  window.location.href = mailtoHref.value
+}
+
+onMounted(async () => {
+  try {
+    const data = (await getSpecialties()) ?? []
+    especialidades.value = data.filter((s) => s.isActive)
+  } catch {
+    // Si la API no responde, el desplegable queda con la opción genérica.
+    especialidades.value = []
+  }
+})
+</script>
+
 <template>
   <section id="contacto" class="relative overflow-hidden bg-white py-24">
-    <!-- Forma orgánica decorativa (referencia a las formas suaves del spa) -->
+    <!-- Formas orgánicas decorativas (referencia a las formas suaves del spa) -->
     <div
-      class="pointer-events-none absolute -right-32 -top-24 h-[520px] w-[520px] rounded-full bg-rose-50 blur-0"
+      class="pointer-events-none absolute -right-32 -top-24 h-[520px] w-[520px] rounded-full bg-rose-50"
       aria-hidden="true"
     ></div>
     <div
@@ -13,55 +73,66 @@
     <div class="relative mx-auto grid max-w-6xl grid-cols-1 gap-16 px-6 lg:grid-cols-2 lg:px-8">
       <!-- Columna izquierda: información -->
       <div class="flex flex-col justify-center">
-        <span class="font-body text-sm font-semibold uppercase tracking-[0.2em] text-red-500">
+        <span class="font-body text-sm font-semibold uppercase tracking-[0.2em] text-aurea">
           Contacto
         </span>
-        <h2 class="mt-3 font-display text-4xl leading-tight text-neutral-800 md:text-5xl">
-          Hablemos de <span class="italic text-red-500">tu piel</span>
-        </h2>
-        <p class="mt-5 max-w-md font-body text-neutral-500">
+        <h1 class="mt-3 font-display text-4xl leading-tight text-gray-800 md:text-5xl">
+          Hablemos de <span class="italic text-aurea">tu piel</span>
+        </h1>
+        <p class="mt-5 max-w-md font-body text-gray-500">
           Escríbenos, llámanos o visítanos. Nuestro equipo te ayudará a encontrar
           el tratamiento perfecto para ti.
         </p>
 
         <ul class="mt-10 space-y-6">
           <li class="flex items-start gap-4">
-            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-red-500"></span>
+            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-aurea"></span>
             <div>
-              <p class="font-body text-sm font-semibold text-neutral-800">Dirección</p>
-              <p class="font-body text-neutral-500">Av. Maximo Gomez, Distrito Nacional, RD</p>
+              <p class="font-body text-sm font-semibold text-gray-800">Dirección</p>
+              <p class="font-body text-gray-500">{{ CLINIC.address }}</p>
             </div>
           </li>
           <li class="flex items-start gap-4">
-            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-red-500"></span>
+            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-aurea"></span>
             <div>
-              <p class="font-body text-sm font-semibold text-neutral-800">Teléfono</p>
-              <p class="font-body text-neutral-500">+1 (809) 555-0134</p>
+              <p class="font-body text-sm font-semibold text-gray-800">Teléfono</p>
+              <a :href="CLINIC.phoneHref" class="font-body text-gray-500 hover:text-aurea transition">
+                {{ CLINIC.phone }}
+              </a>
             </div>
           </li>
           <li class="flex items-start gap-4">
-            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-red-500"></span>
+            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-aurea"></span>
             <div>
-              <p class="font-body text-sm font-semibold text-neutral-800">Correo</p>
-              <p class="font-body text-neutral-500">hola@aureabeautyclinic.com</p>
+              <p class="font-body text-sm font-semibold text-gray-800">Correo</p>
+              <a
+                :href="`mailto:${CLINIC.email}`"
+                class="font-body text-gray-500 hover:text-aurea transition"
+              >
+                {{ CLINIC.email }}
+              </a>
             </div>
           </li>
           <li class="flex items-start gap-4">
-            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-red-500"></span>
+            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-aurea"></span>
             <div>
-              <p class="font-body text-sm font-semibold text-neutral-800">Horario</p>
-              <p class="font-body text-neutral-500">Lun – Sáb, 9:00 am – 6:00 pm</p>
+              <p class="font-body text-sm font-semibold text-gray-800">Horario</p>
+              <p v-for="slot in CLINIC.hours" :key="slot.days" class="font-body text-gray-500">
+                {{ slot.days }}: {{ slot.time }}
+              </p>
             </div>
           </li>
         </ul>
 
         <div class="mt-10 flex gap-3">
           <a
-            href="#"
+            :href="CLINIC.social.instagram"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Instagram"
-            class="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition hover:border-red-500 hover:bg-red-50 hover:text-red-500"
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:border-aurea hover:bg-aurea-tint hover:text-aurea"
           >
-            <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5">
+            <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5" aria-hidden="true">
               <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6" />
               <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6" />
               <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
@@ -69,11 +140,13 @@
           </a>
 
           <a
-            href="#"
+            :href="CLINIC.social.facebook"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Facebook"
-            class="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition hover:border-red-500 hover:bg-red-50 hover:text-red-500"
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:border-aurea hover:bg-aurea-tint hover:text-aurea"
           >
-            <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5">
+            <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5" aria-hidden="true">
               <path
                 d="M14.5 8.5h2V5.6h-2.3c-2.3 0-3.7 1.4-3.7 3.7v1.9H8.6v3h1.9V19h3v-5.8h2.2l.4-3h-2.6V9.6c0-.7.3-1.1 1-1.1Z"
                 fill="currentColor"
@@ -82,11 +155,13 @@
           </a>
 
           <a
-            href="#"
+            :href="`https://wa.me/${CLINIC.whatsapp}`"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="WhatsApp"
-            class="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition hover:border-red-500 hover:bg-red-50 hover:text-red-500"
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:border-aurea hover:bg-aurea-tint hover:text-aurea"
           >
-            <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5">
+            <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5" aria-hidden="true">
               <path
                 d="M12 4.2a7.6 7.6 0 0 0-6.5 11.5L4.5 19.8l4.2-1.1A7.6 7.6 0 1 0 12 4.2Z"
                 stroke="currentColor"
@@ -104,8 +179,10 @@
 
       <!-- Columna derecha: formulario -->
       <div class="relative">
-        <div class="rounded-3xl border border-rose-100 bg-white p-8 shadow-[0_20px_60px_-15px_rgba(224,62,54,0.15)] md:p-10">
-          <form class="space-y-6" @submit.prevent="enviarFormulario">
+        <div
+          class="rounded-3xl border border-rose-100 bg-white p-8 shadow-[0_20px_60px_-15px_rgba(224,62,54,0.15)] md:p-10"
+        >
+          <form class="space-y-6" @submit.prevent="enviarPorCorreo">
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div class="relative">
                 <input
@@ -114,11 +191,11 @@
                   type="text"
                   required
                   placeholder=" "
-                  class="peer w-full border-b border-neutral-300 bg-transparent px-1 pb-2 pt-4 font-body text-neutral-800 outline-none focus:border-red-500"
+                  class="peer w-full border-b border-gray-300 bg-transparent px-1 pb-2 pt-4 font-body text-gray-800 outline-none focus:border-aurea"
                 />
                 <label
                   for="nombre"
-                  class="pointer-events-none absolute left-1 top-4 font-body text-neutral-400 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-red-500 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs"
+                  class="pointer-events-none absolute left-1 top-4 font-body text-gray-400 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-aurea peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs"
                 >
                   Nombre
                 </label>
@@ -130,11 +207,11 @@
                   v-model="formulario.telefono"
                   type="tel"
                   placeholder=" "
-                  class="peer w-full border-b border-neutral-300 bg-transparent px-1 pb-2 pt-4 font-body text-neutral-800 outline-none focus:border-red-500"
+                  class="peer w-full border-b border-gray-300 bg-transparent px-1 pb-2 pt-4 font-body text-gray-800 outline-none focus:border-aurea"
                 />
                 <label
                   for="telefono"
-                  class="pointer-events-none absolute left-1 top-4 font-body text-neutral-400 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-red-500 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs"
+                  class="pointer-events-none absolute left-1 top-4 font-body text-gray-400 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-aurea peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs"
                 >
                   Teléfono
                 </label>
@@ -148,11 +225,11 @@
                 type="email"
                 required
                 placeholder=" "
-                class="peer w-full border-b border-neutral-300 bg-transparent px-1 pb-2 pt-4 font-body text-neutral-800 outline-none focus:border-red-500"
+                class="peer w-full border-b border-gray-300 bg-transparent px-1 pb-2 pt-4 font-body text-gray-800 outline-none focus:border-aurea"
               />
               <label
                 for="correo"
-                class="pointer-events-none absolute left-1 top-4 font-body text-neutral-400 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-red-500 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs"
+                class="pointer-events-none absolute left-1 top-4 font-body text-gray-400 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-aurea peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs"
               >
                 Correo electrónico
               </label>
@@ -162,19 +239,18 @@
               <select
                 id="servicio"
                 v-model="formulario.servicio"
-                required
-                class="peer w-full border-b border-neutral-300 bg-transparent px-1 pb-2 pt-4 font-body text-neutral-800 outline-none focus:border-red-500"
+                class="peer w-full border-b border-gray-300 bg-transparent px-1 pb-2 pt-4 font-body text-gray-800 outline-none focus:border-aurea"
               >
-                <option value="" disabled selected></option>
-                <option value="facial">Tratamiento facial</option>
-                <option value="corporal">Tratamiento corporal</option>
-                <option value="microneedling">Microneedling</option>
-                <option value="otro">Otro</option>
+                <option value="">Sin preferencia</option>
+                <option
+                  v-for="especialidad in especialidades"
+                  :key="especialidad.specialtyId"
+                  :value="especialidad.name"
+                >
+                  {{ especialidad.name }}
+                </option>
               </select>
-              <label
-                for="servicio"
-                class="pointer-events-none absolute left-1 top-0 font-body text-xs text-red-500"
-              >
+              <label for="servicio" class="pointer-events-none absolute left-1 top-0 font-body text-xs text-aurea">
                 Servicio de interés
               </label>
             </div>
@@ -185,11 +261,11 @@
                 v-model="formulario.mensaje"
                 rows="3"
                 placeholder=" "
-                class="peer w-full resize-none border-b border-neutral-300 bg-transparent px-1 pb-2 pt-4 font-body text-neutral-800 outline-none focus:border-red-500"
+                class="peer w-full resize-none border-b border-gray-300 bg-transparent px-1 pb-2 pt-4 font-body text-gray-800 outline-none focus:border-aurea"
               ></textarea>
               <label
                 for="mensaje"
-                class="pointer-events-none absolute left-1 top-4 font-body text-neutral-400 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-red-500 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs"
+                class="pointer-events-none absolute left-1 top-4 font-body text-gray-400 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-aurea peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs"
               >
                 Cuéntanos qué buscas
               </label>
@@ -197,14 +273,27 @@
 
             <button
               type="submit"
-              :disabled="enviando"
-              class="w-full rounded-full bg-red-500 py-3.5 font-body text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+              class="w-full rounded-full bg-aurea py-3.5 font-body text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-aurea-dark cursor-pointer"
             >
-              {{ enviando ? 'Enviando…' : 'Enviar mensaje' }}
+              Enviar por correo
             </button>
 
-            <p v-if="mensajeEstado" class="text-center font-body text-sm" :class="huboError ? 'text-red-500' : 'text-emerald-600'">
-              {{ mensajeEstado }}
+            <a
+              :href="whatsappHref"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block w-full rounded-full border border-gray-200 py-3.5 text-center font-body text-sm font-semibold uppercase tracking-wide text-gray-600 transition hover:border-aurea hover:text-aurea"
+            >
+              Escribir por WhatsApp
+            </a>
+
+            <p class="text-center font-body text-xs text-gray-400">
+              Al enviar se abrirá tu aplicación de correo o WhatsApp con el mensaje ya redactado.
+              ¿Prefieres reservar directamente?
+              <RouterLink to="/reservar" class="font-semibold text-aurea hover:underline">
+                Agenda tu cita en línea
+              </RouterLink>
+              .
             </p>
           </form>
         </div>
@@ -212,52 +301,3 @@
     </div>
   </section>
 </template>
-
-<script setup>
-import { reactive, ref } from 'vue'
-
-const formulario = reactive({
-  nombre: '',
-  telefono: '',
-  correo: '',
-  servicio: '',
-  mensaje: '',
-})
-
-const enviando = ref(false)
-const mensajeEstado = ref('')
-const huboError = ref(false)
-
-async function enviarFormulario() {
-  enviando.value = true
-  mensajeEstado.value = ''
-  huboError.value = false
-
-  try {
-    // Reemplazar con la llamada real al backend (por ejemplo, un endpoint /api/contacto)
-    await new Promise((resolve) => setTimeout(resolve, 900))
-
-    mensajeEstado.value = '¡Gracias! Te contactaremos muy pronto.'
-    formulario.nombre = ''
-    formulario.telefono = ''
-    formulario.correo = ''
-    formulario.servicio = ''
-    formulario.mensaje = ''
-  } catch (error) {
-    huboError.value = true
-    mensajeEstado.value = 'Ocurrió un error al enviar tu mensaje. Intenta de nuevo.'
-  } finally {
-    enviando.value = false
-  }
-}
-</script>
-
-<style scoped>
-/* Tipografías consistentes con el resto del sitio */
-.font-display {
-  font-family: 'Playfair Display', serif;
-}
-.font-body {
-  font-family: 'Poppins', sans-serif;
-}
-</style>

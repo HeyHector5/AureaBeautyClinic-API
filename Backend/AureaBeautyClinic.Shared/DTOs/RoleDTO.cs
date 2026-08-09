@@ -7,6 +7,7 @@ namespace AureaBeautyClinic.Shared.DTOs
 	public record RoleDTO(
 		int RoleId,
 		string name,
-		string? description
+		string? description,
+		bool isActive
 	);
 }

@@ -3,6 +3,7 @@ using AureaBeautyClinic.Shared.Common;
 using AureaBeautyClinic.Shared.DTOs;
 using AureaBeautyClinic.Shared.Entities;
 using AureaBeautyClinic.Shared.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AureaBeautyClinic.API.Controllers
@@ -36,6 +37,7 @@ namespace AureaBeautyClinic.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<SpecialtyDTO>>> Create([FromBody] CreateSpecialtyRequest request)
         {
             var specialty = new Specialty
@@ -51,6 +53,7 @@ namespace AureaBeautyClinic.API.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<SpecialtyDTO>>> Update(int id, [FromBody] UpdateSpecialtyRequest request)
         {
             var existing = await _specialtyService.GetByIdAsync(id);
@@ -66,8 +69,22 @@ namespace AureaBeautyClinic.API.Controllers
             };
             await _specialtyService.UpdateAsync(specialty);
 
-            var updated = existing with { name = request.Name, description = request.Description, isActive = request.IsActive };
-            return Ok(ApiResponse<SpecialtyDTO>.Ok(updated, "Specialty updated successfully."));
+            var updated = await _specialtyService.GetByIdAsync(id);
+            return Ok(ApiResponse<SpecialtyDTO>.Ok(updated!, "Specialty updated successfully."));
+        }
+
+        /// <summary>
+        /// Soft delete: marca la especialidad como inactiva. La fila nunca se elimina.
+        /// </summary>
+        [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ApiResponse<SpecialtyDTO>>> Deactivate(int id)
+        {
+            var deactivated = await _specialtyService.DeactivateAsync(id);
+            if (deactivated is null)
+                return NotFound(ApiResponse<SpecialtyDTO>.Fail($"Specialty with ID {id} was not found."));
+
+            return Ok(ApiResponse<SpecialtyDTO>.Ok(deactivated, "Specialty deactivated successfully."));
         }
     }
 }

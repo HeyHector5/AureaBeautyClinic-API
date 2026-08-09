@@ -5,6 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AureaBeautyClinic.Data.Repositories
 {
+    /// <summary>
+    /// Todas las consultas cargan el mismo grafo completo: AppointmentDTO anida
+    /// DoctorDTO, que a su vez anida UserDTO y RoleDTO. Si falta cualquiera de
+    /// estos Include (en particular Doctor.User), ToDto() lanza NullReferenceException.
+    /// </summary>
     public class AppointmentRepository : IAppointmentRepository
     {
         private readonly ApplicationContext _context;
@@ -20,6 +25,9 @@ namespace AureaBeautyClinic.Data.Repositories
                     .ThenInclude(u => u.Role)
                 .Include(a => a.Doctor)
                     .ThenInclude(d => d.Specialty)
+                .Include(a => a.Doctor)
+                    .ThenInclude(d => d.User)
+                        .ThenInclude(u => u.Role)
                 .ToListAsync();
 
         public async Task<Appointment?> GetByIdAsync(int AppointmentId) =>
@@ -28,6 +36,9 @@ namespace AureaBeautyClinic.Data.Repositories
                     .ThenInclude(u => u.Role)
                 .Include(a => a.Doctor)
                     .ThenInclude(d => d.Specialty)
+                .Include(a => a.Doctor)
+                    .ThenInclude(d => d.User)
+                        .ThenInclude(u => u.Role)
                 .FirstOrDefaultAsync(a => a.AppointmentId == AppointmentId);
 
         public async Task<IEnumerable<Appointment>> GetByUserIdAsync(int UserId) =>
@@ -36,6 +47,9 @@ namespace AureaBeautyClinic.Data.Repositories
                     .ThenInclude(u => u.Role)
                 .Include(a => a.Doctor)
                     .ThenInclude(d => d.Specialty)
+                .Include(a => a.Doctor)
+                    .ThenInclude(d => d.User)
+                        .ThenInclude(u => u.Role)
                 .Where(a => a.UserId == UserId)
                 .ToListAsync();
 
@@ -45,6 +59,9 @@ namespace AureaBeautyClinic.Data.Repositories
                     .ThenInclude(u => u.Role)
                 .Include(a => a.Doctor)
                     .ThenInclude(d => d.Specialty)
+                .Include(a => a.Doctor)
+                    .ThenInclude(d => d.User)
+                        .ThenInclude(u => u.Role)
                 .Where(a => a.DoctorId == DoctorId)
                 .ToListAsync();
 

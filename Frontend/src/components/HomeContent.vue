@@ -5,7 +5,7 @@
     <section class="bg-white py-24 px-8">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-16">
-          <span class="block text-[#FF3B30] text-xs font-bold tracking-[0.2em] mb-4">NUESTROS SERVICIOS</span>
+          <span class="block text-aurea text-xs font-bold tracking-[0.2em] mb-4">NUESTROS SERVICIOS</span>
           <h2 class="text-4xl font-serif font-light tracking-tight text-gray-800">
             Tratamientos para tu bienestar
           </h2>
@@ -14,15 +14,15 @@
           <div
             v-for="service in services"
             :key="service.name"
-            class="group border border-gray-100 rounded-xl p-8 hover:border-[#FF3B30] hover:shadow-lg transition-all duration-300 cursor-pointer"
+            class="group border border-gray-100 rounded-xl p-8 hover:border-aurea hover:shadow-lg transition-all duration-300 cursor-pointer"
             @click="router.push('/servicios')"
           >
-            <div class="w-20 h-20 rounded-full overflow-hidden mb-6 border-2 border-gray-100 group-hover:border-[#FF3B30] transition-all duration-300">
+            <div class="w-20 h-20 rounded-full overflow-hidden mb-6 border-2 border-gray-100 group-hover:border-aurea transition-all duration-300">
               <img :src="service.img" :alt="service.name" class="w-full h-full object-cover" />
             </div>
             <h3 class="text-lg font-bold text-gray-800 mb-3">{{ service.name }}</h3>
             <p class="text-sm text-gray-500 leading-relaxed mb-6">{{ service.desc }}</p>
-            <span class="text-[#FF3B30] text-sm font-bold tracking-wide group-hover:underline">
+            <span class="text-aurea text-sm font-bold tracking-wide group-hover:underline">
               Ver más →
             </span>
           </div>
@@ -34,7 +34,7 @@
     <section class="bg-black py-24 px-8">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-16">
-          <span class="block text-[#FF3B30] text-xs font-bold tracking-[0.2em] mb-4">EL PROCESO</span>
+          <span class="block text-aurea text-xs font-bold tracking-[0.2em] mb-4">EL PROCESO</span>
           <h2 class="text-4xl font-serif font-light tracking-tight text-white">
             Así de simple es comenzar
           </h2>
@@ -49,8 +49,8 @@
               v-if="i < steps.length - 1"
               class="hidden md:block absolute top-8 left-1/2 w-full h-px bg-gray-800 z-0"
             ></div>
-            <div class="relative z-10 w-16 h-16 rounded-full border border-[#FF3B30] flex items-center justify-center mb-6 bg-black">
-              <span class="text-[#FF3B30] text-xl font-bold font-serif">{{ i + 1 }}</span>
+            <div class="relative z-10 w-16 h-16 rounded-full border border-aurea flex items-center justify-center mb-6 bg-black">
+              <span class="text-aurea text-xl font-bold font-serif">{{ i + 1 }}</span>
             </div>
             <h4 class="text-white font-bold text-sm mb-3 tracking-wide uppercase">{{ step.title }}</h4>
             <p class="text-gray-500 text-sm leading-relaxed">{{ step.desc }}</p>
@@ -60,7 +60,7 @@
     </section>
 
     <!-- CTA -->
-    <section class="bg-[#FF3B30] py-24 px-8">
+    <section class="bg-aurea py-24 px-8">
       <div class="max-w-3xl mx-auto text-center">
         <h2 class="text-4xl font-serif font-light text-white mb-6 tracking-tight">
           ¿Lista para transformarte?
@@ -70,10 +70,10 @@
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <button
-            @click="router.push('/register')"
-            class="bg-white text-[#FF3B30] font-bold py-4 px-10 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer text-sm tracking-wide"
+            @click="router.push(isLoggedIn ? '/reservar' : '/register')"
+            class="bg-white text-aurea font-bold py-4 px-10 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer text-sm tracking-wide"
           >
-            Crear cuenta gratis
+            {{ isLoggedIn ? 'Reservar mi cita' : 'Crear cuenta gratis' }}
           </button>
           <button
             @click="router.push('/nosotros')"
@@ -93,9 +93,11 @@ import { useRouter } from 'vue-router'
 import cara from '@/assets/cara.jpg'
 import trataCorp from '@/assets/trataCorp.jpg'
 import dermatologia from '@/assets/dermartologia.jpg'
-import capilar from '@/assets/capilar.jpg'   
+import capilar from '@/assets/capilar.jpg'
+import { useAuth } from '@/composables/useAuth'
 
 const router = useRouter()
+const { isLoggedIn } = useAuth()
 
 const services = [
   {

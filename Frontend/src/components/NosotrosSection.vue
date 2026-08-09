@@ -5,7 +5,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center max-w-7xl mx-auto pb-16">
         
         <div class="max-w-2xl">
-          <span class="block text-[#FF3B30] text-xs font-bold tracking-[0.2em] mb-4">NUESTRA HISTORIA</span>
+          <span class="block text-aurea text-xs font-bold tracking-[0.2em] mb-4">NUESTRA HISTORIA</span>
           <h1 class="text-5xl font-light leading-tight tracking-tight mb-6">
             Donde la ciencia<br>encuentra la belleza
           </h1>
@@ -27,7 +27,7 @@
 
       <div class="flex border-t border-gray-800 max-w-7xl mx-auto">
         <div v-for="stat in stats" :key="stat.label" class="flex-1 py-8 border-r border-gray-800 last:border-r-0">
-          <span class="block text-4xl font-light text-[#FF3B30] tracking-tight">{{ stat.number }}</span>
+          <span class="block text-4xl font-light text-aurea tracking-tight">{{ stat.number }}</span>
           <span class="block font-sans text-xs text-gray-500 tracking-widest mt-1">{{ stat.label }}</span>
         </div>
       </div>
@@ -35,12 +35,12 @@
 
     <div class="bg-white px-16 py-24 grid grid-cols-1 md:grid-cols-2 gap-20 items-center max-w-7xl mx-auto">
       <div>
-        <span class="block text-[#FF3B30] text-xs font-bold tracking-[0.2em] mb-4">QUIÉNES SOMOS</span>
+        <span class="block text-aurea text-xs font-bold tracking-[0.2em] mb-4">QUIÉNES SOMOS</span>
         <h2 class="text-3xl font-light leading-snug tracking-tight mb-6">
           Una clínica nacida de la pasión por el bienestar
         </h2>
         <p class="font-sans text-sm text-gray-500 leading-relaxed mb-4">
-          Aurea Beauty Clinic fue founded con una visión clara: ofrecer tratamientos estéticos de élite
+          Aurea Beauty Clinic fue fundada con una visión clara: ofrecer tratamientos estéticos de élite
           accesibles para todos, sin sacrificar calidad ni seguridad. Nuestro nombre, inspirado en el latín
           <em class="italic">aurea</em> (dorado), refleja el estándar de excelencia que perseguimos en cada procedimiento.
         </p>
@@ -51,7 +51,7 @@
         </p>
       </div>
 
-      <div class="bg-[#FF3B30] text-white p-10 rounded-sm shadow-xl">
+      <div class="bg-aurea text-white p-10 rounded-sm shadow-xl">
         <div class="text-7xl leading-none opacity-30 font-serif mb-4">"</div>
         <p class="text-lg italic leading-relaxed mb-8">
           La belleza no es un lujo, es un acto de amor propio que merece los mejores cuidados.
@@ -73,11 +73,11 @@
         <div
           v-for="item in mvv"
           :key="item.title"
-          class="bg-white border border-gray-200 p-10 rounded-sm hover:border-[#FF3B30] hover:-translate-y-1 transition-all duration-200"
+          class="bg-white border border-gray-200 p-10 rounded-sm hover:border-aurea hover:-translate-y-1 transition-all duration-200"
         >
           <div class="w-8 h-8 mb-6">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path :d="item.iconPath" stroke="#FF3B30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path :d="item.iconPath" stroke="currentColor" class="text-aurea" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
           <h3 class="text-xl font-light mb-3 tracking-tight">{{ item.title }}</h3>
@@ -86,13 +86,67 @@
       </div>
     </div>
 
+    <!-- NUESTRO EQUIPO: se lee de la API (GET /api/doctors), no está escrito a mano -->
+    <div v-if="team.length" class="bg-white px-8 md:px-16 py-24 border-t border-gray-100">
+      <div class="max-w-7xl mx-auto">
+        <span class="block text-aurea text-xs font-bold tracking-[0.2em] mb-4 text-center">
+          NUESTRO EQUIPO
+        </span>
+        <h2 class="text-4xl font-light tracking-tight text-center mb-4">
+          Los especialistas que te acompañan
+        </h2>
+        <p class="font-sans text-sm text-gray-500 text-center max-w-xl mx-auto mb-16">
+          Cada tratamiento está en manos de profesionales certificados y con años de experiencia.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <article
+            v-for="doctor in team"
+            :key="doctor.doctorId"
+            class="border border-gray-100 rounded-sm p-8 transition-all duration-300 hover:border-aurea hover:-translate-y-1"
+          >
+            <div class="flex items-center gap-4 mb-5">
+              <img
+                v-if="doctor.photoURL"
+                :src="doctor.photoURL"
+                :alt="`Foto de ${doctor.user?.name} ${doctor.user?.lastName}`"
+                class="h-16 w-16 rounded-full object-cover shrink-0"
+              />
+              <span
+                v-else
+                class="h-16 w-16 shrink-0 rounded-full bg-aurea-tint text-aurea flex items-center justify-center text-lg font-bold"
+                aria-hidden="true"
+              >
+                {{ (doctor.user?.name?.[0] ?? '') + (doctor.user?.lastName?.[0] ?? '') }}
+              </span>
+              <div class="min-w-0">
+                <h3 class="text-lg font-light tracking-tight truncate">
+                  {{ doctor.user?.name }} {{ doctor.user?.lastName }}
+                </h3>
+                <p class="font-sans text-xs uppercase tracking-widest text-aurea">
+                  {{ doctor.specialty?.name }}
+                </p>
+              </div>
+            </div>
+
+            <p v-if="doctor.biography" class="font-sans text-sm text-gray-500 leading-relaxed">
+              {{ doctor.biography }}
+            </p>
+            <p v-if="doctor.licenseNumber" class="mt-4 font-sans text-xs text-gray-400">
+              Licencia {{ doctor.licenseNumber }}
+            </p>
+          </article>
+        </div>
+      </div>
+    </div>
+
     <div class="bg-gray-50 px-16 py-24 border-t border-gray-200">
       <div class="max-w-7xl mx-auto">
-        <span class="block text-[#FF3B30] text-xs font-bold tracking-[0.2em] mb-4 text-center">POR QUÉ ELEGIRNOS</span>
+        <span class="block text-aurea text-xs font-bold tracking-[0.2em] mb-4 text-center">POR QUÉ ELEGIRNOS</span>
         <h2 class="text-4xl font-light tracking-tight text-center mb-16">El estándar Aurea</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div v-for="pillar in pillars" :key="pillar.title">
-            <div class="w-8 h-0.5 bg-[#FF3B30] mb-5"></div>
+            <div class="w-8 h-0.5 bg-aurea mb-5"></div>
             <h4 class="font-sans font-bold text-sm mb-3 tracking-tight">{{ pillar.title }}</h4>
             <p class="font-sans text-sm text-gray-500 leading-relaxed">{{ pillar.desc }}</p>
           </div>
@@ -104,9 +158,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 // Importación correcta de tu imagen desde la carpeta assets
-import sillaImg from '../assets/silla.jpg' 
+import sillaImg from '../assets/silla.jpg'
+import { getDoctors } from '@/services/doctorService'
+
+// El equipo se lee de la API (DoctorDTO) en vez de estar escrito a mano.
+const doctors = ref([])
+const team = computed(() => doctors.value.filter((d) => d.isActive))
+
+onMounted(async () => {
+  try {
+    doctors.value = (await getDoctors()) ?? []
+  } catch {
+    // Si la API no responde, simplemente no se muestra la sección de equipo.
+    doctors.value = []
+  }
+})
 
 const stats = [
   { number: '10+', label: 'Años de experiencia' },

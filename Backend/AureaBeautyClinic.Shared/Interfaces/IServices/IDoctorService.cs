@@ -9,5 +9,6 @@ namespace AureaBeautyClinic.Shared.Interfaces.IServices
         Task<DoctorDTO?> GetByIdAsync(int DoctorId);
         Task<DoctorDTO> CreateAsync(Doctor doctor);
         Task UpdateAsync(Doctor doctor);
+        Task<DoctorDTO?> DeactivateAsync(int DoctorId);
     }
 }

@@ -9,5 +9,6 @@ namespace AureaBeautyClinic.Shared.Interfaces.IServices
         Task<RoleDTO?> GetByIdAsync(int RoleId);
         Task<RoleDTO> CreateAsync(Role role);
         Task UpdateAsync(Role role);
+        Task<RoleDTO?> DeactivateAsync(int RoleId);
     }
 }

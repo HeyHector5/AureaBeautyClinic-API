@@ -8,7 +8,8 @@ namespace AureaBeautyClinic.Business.Mappings
         public static RoleDTO ToDto(this Role role) => new(
             role.RoleId,
             role.Name,
-            role.Description
+            role.Description,
+            role.IsActive
         );
     }
 }

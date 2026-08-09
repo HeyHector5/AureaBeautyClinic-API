@@ -1,10 +1,15 @@
 <script setup>
-import { ref } from 'vue'
-import { register } from '@/services/authService'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Swal from 'sweetalert2' // 1. Importamos SweetAlert2
+import Swal from 'sweetalert2'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import { register } from '@/services/authService'
+import { useAuth } from '@/composables/useAuth'
+import { BRAND_RED } from '@/constants/clinic'
+import { notifyApiError, notifyWarning } from '@/utils/notify'
 
 const router = useRouter()
+const { setSession } = useAuth()
 
 const name = ref('')
 const lastName = ref('')
@@ -14,60 +19,57 @@ const password = ref('')
 const confirmPassword = ref('')
 const loading = ref(false)
 
-// Quitamos la variable reactiva 'error' ya que SweetAlert2 manejará todos los flujos de avisos
+/** El backend exige entre 8 y 100 caracteres (RegisterRequest). */
+const MIN_PASSWORD = 8
+const passwordTooShort = computed(
+  () => password.value.length > 0 && password.value.length < MIN_PASSWORD
+)
+const passwordsMismatch = computed(
+  () => confirmPassword.value.length > 0 && password.value !== confirmPassword.value
+)
 
 const handleRegister = async () => {
-  // Validación local de contraseñas con modal de advertencia tipo Warning
+  if (password.value.length < MIN_PASSWORD) {
+    notifyWarning(
+      'Contraseña demasiado corta',
+      `Usa al menos ${MIN_PASSWORD} caracteres para proteger tu cuenta.`
+    )
+    return
+  }
+
   if (password.value !== confirmPassword.value) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Contraseñas no coinciden',
-      text: 'Por favor, asegúrate de escribir la misma contraseña en ambos campos.',
-      confirmButtonColor: '#FF3B30',
-    })
+    notifyWarning(
+      'Las contraseñas no coinciden',
+      'Asegúrate de escribir la misma contraseña en ambos campos.'
+    )
     return
   }
 
   loading.value = true
-
   try {
-    const res = await register(name.value, lastName.value, email.value, password.value, phone.value)
+    const auth = await register(
+      name.value,
+      lastName.value,
+      email.value,
+      password.value,
+      phone.value
+    )
 
-    if (!res.success) {
-      // 2. Alerta si el correo ya existe o falla alguna validación del servidor
-      Swal.fire({
-        icon: 'error',
-        title: 'No se pudo crear la cuenta',
-        text: res.message || 'Hubo un inconveniente al procesar tus datos.',
-        confirmButtonColor: '#FF3B30',
-      })
-      return
-    }
+    // El registro ya devuelve un token: iniciamos sesión directamente.
+    setSession(auth)
 
-    // 3. ¡ALERTA DE ÉXITO PREMIUM! 
-    Swal.fire({
+    await Swal.fire({
       icon: 'success',
-      title: '¡Cuenta Creada con Éxito!',
-      text: 'Tu perfil en Aurea Beauty Clinic ha sido registrado. Ya puedes iniciar sesión.',
-      confirmButtonText: 'Ir al Login 🚀',
-      confirmButtonColor: '#FF3B30',
-      allowOutsideClick: false, // Evita que cierren el modal haciendo clic fuera
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Redirección fluida mediante el router al Login
-        router.push('/login')
-      }
+      title: '¡Cuenta creada con éxito!',
+      text: 'Tu perfil en Aurea Beauty Clinic quedó listo. Reserva tu primera cita cuando quieras.',
+      confirmButtonText: 'Ir a mi cuenta',
+      confirmButtonColor: BRAND_RED,
+      allowOutsideClick: false
     })
 
+    router.push('/dashboard')
   } catch (e) {
-    console.error('Error:', e)
-    // 4. Alerta de protección ante fallas de red o caídas del backend
-    Swal.fire({
-      icon: 'error',
-      title: 'Error de conexión',
-      text: 'No pudimos conectar con el servidor. Por favor, intenta de nuevo más tarde.',
-      confirmButtonColor: '#FF3B30',
-    })
+    notifyApiError(e, 'No se pudo crear la cuenta')
   } finally {
     loading.value = false
   }
@@ -78,72 +80,115 @@ const handleRegister = async () => {
   <div class="flex items-center justify-center min-h-[80vh] bg-gray-50 px-4 py-12">
     <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
       <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-gray-800 tracking-tighter">Crea tu Cuenta</h2>
+        <h1 class="text-3xl font-serif font-light text-gray-800">Crea tu cuenta</h1>
         <p class="text-gray-500 mt-2 text-sm">Únete a la experiencia de Aurea Beauty</p>
       </div>
 
-      <form @submit.prevent="handleRegister" class="space-y-4">
-
-        <!-- Nombre y Apellido en fila -->
+      <form class="space-y-4" @submit.prevent="handleRegister">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
-            <input type="text" v-model="name"
-              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF3B30] outline-none transition-all"
-              placeholder="Juan" required />
+            <label for="reg-name" class="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
+            <input
+              id="reg-name"
+              v-model="name"
+              type="text"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-aurea focus:border-transparent outline-none transition-all"
+              placeholder="Juan"
+              autocomplete="given-name"
+              required
+            />
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Apellido</label>
-            <input type="text" v-model="lastName"
-              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF3B30] outline-none transition-all"
-              placeholder="Pérez" required />
+            <label for="reg-lastname" class="block text-sm font-semibold text-gray-700 mb-1">Apellido</label>
+            <input
+              id="reg-lastname"
+              v-model="lastName"
+              type="text"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-aurea focus:border-transparent outline-none transition-all"
+              placeholder="Pérez"
+              autocomplete="family-name"
+              required
+            />
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Teléfono</label>
-          <input type="tel" v-model="phone"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF3B30] outline-none transition-all"
-            placeholder="809-555-0000" required />
+          <label for="reg-phone" class="block text-sm font-semibold text-gray-700 mb-1">Teléfono</label>
+          <input
+            id="reg-phone"
+            v-model="phone"
+            type="tel"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-aurea focus:border-transparent outline-none transition-all"
+            placeholder="809-555-0000"
+            autocomplete="tel"
+            required
+          />
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Correo Electrónico</label>
-          <input type="email" v-model="email"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF3B30] outline-none transition-all"
-            placeholder="ejemplo@correo.com" required />
+          <label for="reg-email" class="block text-sm font-semibold text-gray-700 mb-1">
+            Correo electrónico
+          </label>
+          <input
+            id="reg-email"
+            v-model="email"
+            type="email"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-aurea focus:border-transparent outline-none transition-all"
+            placeholder="ejemplo@correo.com"
+            autocomplete="email"
+            required
+          />
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Contraseña</label>
-          <input type="password" v-model="password"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF3B30] outline-none transition-all"
-            placeholder="••••••••" required />
+          <label for="reg-password" class="block text-sm font-semibold text-gray-700 mb-1">
+            Contraseña
+          </label>
+          <input
+            id="reg-password"
+            v-model="password"
+            type="password"
+            :minlength="MIN_PASSWORD"
+            class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-aurea focus:border-transparent outline-none transition-all"
+            :class="passwordTooShort ? 'border-red-400' : 'border-gray-300'"
+            placeholder="••••••••"
+            autocomplete="new-password"
+            required
+          />
+          <p class="mt-1 text-xs" :class="passwordTooShort ? 'text-red-600' : 'text-gray-400'">
+            Mínimo {{ MIN_PASSWORD }} caracteres.
+          </p>
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Confirmar Contraseña</label>
-          <input type="password" v-model="confirmPassword"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF3B30] outline-none transition-all"
-            placeholder="••••••••" required />
+          <label for="reg-confirm" class="block text-sm font-semibold text-gray-700 mb-1">
+            Confirmar contraseña
+          </label>
+          <input
+            id="reg-confirm"
+            v-model="confirmPassword"
+            type="password"
+            class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-aurea focus:border-transparent outline-none transition-all"
+            :class="passwordsMismatch ? 'border-red-400' : 'border-gray-300'"
+            placeholder="••••••••"
+            autocomplete="new-password"
+            required
+          />
+          <p v-if="passwordsMismatch" class="mt-1 text-xs text-red-600">
+            Las contraseñas no coinciden.
+          </p>
         </div>
 
-        <!-- Removido el elemento <p v-if="error"> para evitar rupturas estéticas en el formulario -->
-
-        <button
-          type="submit"
-          :disabled="loading"
-          class="w-full bg-[#FF3B30] hover:bg-[#e0342a] text-white font-bold py-3 rounded-lg transition-all transform hover:scale-[1.02] cursor-pointer shadow-lg active:scale-95 disabled:opacity-50"
-        >
+        <BaseButton type="submit" size="lg" :loading="loading" class="mt-2">
           {{ loading ? 'Registrando...' : 'Registrarse ahora' }}
-        </button>
+        </BaseButton>
       </form>
 
       <p class="text-center mt-8 text-sm text-gray-600">
         ¿Ya tienes una cuenta?
-        <button @click="router.push('/login')" class="text-[#FF3B30] font-bold hover:underline cursor-pointer ml-1">
+        <RouterLink to="/login" class="text-aurea font-bold hover:underline ml-1">
           Inicia sesión aquí
-        </button>
+        </RouterLink>
       </p>
     </div>
   </div>

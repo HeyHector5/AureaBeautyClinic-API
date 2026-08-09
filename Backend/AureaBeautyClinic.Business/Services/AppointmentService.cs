@@ -1,4 +1,5 @@
 using AureaBeautyClinic.Business.Mappings;
+using AureaBeautyClinic.Shared.Constants;
 using AureaBeautyClinic.Shared.DTOs;
 using AureaBeautyClinic.Shared.Entities;
 using AureaBeautyClinic.Shared.Interfaces.IRepositories;
@@ -42,10 +43,27 @@ namespace AureaBeautyClinic.Business.Services
         public async Task<AppointmentDTO> CreateAsync(Appointment appointment)
         {
             var created = await _appointmentRepository.CreateAsync(appointment);
-            return created.ToDto();
+
+            // La entidad recién insertada no trae las navegaciones User/Doctor,
+            // y ToDto() las desreferencia. Se relee con los Include del repositorio.
+            var full = await _appointmentRepository.GetByIdAsync(created.AppointmentId)
+                ?? throw new InvalidOperationException("Appointment was created but could not be retrieved.");
+
+            return full.ToDto();
         }
 
         public async Task UpdateAsync(Appointment appointment) =>
             await _appointmentRepository.UpdateAsync(appointment);
+
+        public async Task<AppointmentDTO?> CancelAsync(int AppointmentId)
+        {
+            var existing = await _appointmentRepository.GetByIdAsync(AppointmentId);
+            if (existing is null) return null;
+
+            existing.State = Appointmenttatus.Cancelled;
+            await _appointmentRepository.UpdateAsync(existing);
+
+            return existing.ToDto();
+        }
     }
 }

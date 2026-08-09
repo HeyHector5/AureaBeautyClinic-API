@@ -3,6 +3,7 @@ using AureaBeautyClinic.Shared.Common;
 using AureaBeautyClinic.Shared.DTOs;
 using AureaBeautyClinic.Shared.Entities;
 using AureaBeautyClinic.Shared.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AureaBeautyClinic.API.Controllers
@@ -36,9 +37,15 @@ namespace AureaBeautyClinic.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<RoleDTO>>> Create([FromBody] CreateRoleRequest request)
         {
-            var role = new Role { Name = request.Name, Description = request.Description };
+            var role = new Role
+            {
+                Name = request.Name,
+                Description = request.Description,
+                IsActive = request.IsActive
+            };
             var created = await _roleService.CreateAsync(role);
 
             return CreatedAtAction(nameof(GetById), new { id = created.RoleId },
@@ -46,17 +53,38 @@ namespace AureaBeautyClinic.API.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<RoleDTO>>> Update(int id, [FromBody] UpdateRoleRequest request)
         {
             var existing = await _roleService.GetByIdAsync(id);
             if (existing is null)
                 return NotFound(ApiResponse<RoleDTO>.Fail($"Role with ID {id} was not found."));
 
-            var role = new Role { RoleId = id, Name = request.Name, Description = request.Description };
+            var role = new Role
+            {
+                RoleId = id,
+                Name = request.Name,
+                Description = request.Description,
+                IsActive = request.IsActive
+            };
             await _roleService.UpdateAsync(role);
 
-            var updated = existing with { name = request.Name, description = request.Description };
-            return Ok(ApiResponse<RoleDTO>.Ok(updated, "Role updated successfully."));
+            var updated = await _roleService.GetByIdAsync(id);
+            return Ok(ApiResponse<RoleDTO>.Ok(updated!, "Role updated successfully."));
+        }
+
+        /// <summary>
+        /// Soft delete: marca el rol como inactivo. La fila nunca se elimina.
+        /// </summary>
+        [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ApiResponse<RoleDTO>>> Deactivate(int id)
+        {
+            var deactivated = await _roleService.DeactivateAsync(id);
+            if (deactivated is null)
+                return NotFound(ApiResponse<RoleDTO>.Fail($"Role with ID {id} was not found."));
+
+            return Ok(ApiResponse<RoleDTO>.Ok(deactivated, "Role deactivated successfully."));
         }
     }
 }

@@ -25,7 +25,23 @@
       <p class="text-lg md:text-xl mb-8 font-light tracking-widest animate-fade-in-up delay-200">
         Echa un vistazo dentro de nuestro mundo maravilloso
       </p>
-      
+
+      <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-500">
+        <button
+          type="button"
+          class="bg-aurea hover:bg-aurea-dark text-white font-bold py-4 px-10 rounded-lg shadow-lg transition-colors cursor-pointer text-sm tracking-wide"
+          @click="router.push('/reservar')"
+        >
+          Reservar mi cita
+        </button>
+        <button
+          type="button"
+          class="border border-white text-white font-bold py-4 px-10 rounded-lg hover:bg-white/10 transition-colors cursor-pointer text-sm tracking-wide"
+          @click="router.push('/servicios')"
+        >
+          Ver servicios
+        </button>
+      </div>
     </div>
 
     <!-- Indicadores de posición -->
@@ -42,39 +58,32 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
 
 // Importación de imágenes desde assets
 import img1 from '../assets/cara.jpg';
 import img2 from '../assets/exfoliante.jpg';
 import img3 from '../assets/laser.jpg';
 
+const router = useRouter();
+
 const images = [img1, img2, img3];
 const currentSlide = ref(0);
 
+let timer = null;
+
 onMounted(() => {
-  setInterval(() => {
+  timer = setInterval(() => {
     currentSlide.value = (currentSlide.value + 1) % images.length;
   }, 5000);
 });
+
+// Sin esto el intervalo seguía corriendo tras salir de la página.
+onBeforeUnmount(() => clearInterval(timer));
 </script>
 
-<style scoped>
-.animate-fade-in-up {
-  animation: fadeInUp 1s ease-out forwards;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.delay-200 { animation-delay: 0.2s; }
-.delay-500 { animation-delay: 0.5s; }
-</style>
+<!--
+  Las animaciones .animate-fade-in-up / .delay-* viven ahora en src/style.css
+  para poder reutilizarlas desde cualquier componente.
+-->

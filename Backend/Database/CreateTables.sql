@@ -17,7 +17,8 @@ CREATE TABLE Roles
 (
     RoleId      INT             IDENTITY(1,1) PRIMARY KEY,
     Name        NVARCHAR(100)   NOT NULL,
-    Description  NVARCHAR(500)   NULL
+    Description  NVARCHAR(500)   NULL,
+    IsActive    BIT             NOT NULL DEFAULT 1
 );
 GO
 

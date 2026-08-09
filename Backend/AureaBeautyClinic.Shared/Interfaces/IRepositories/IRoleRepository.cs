@@ -6,6 +6,7 @@ namespace AureaBeautyClinic.Shared.Interfaces.IRepositories
     {
         Task<IEnumerable<Role>> GetAllAsync();
         Task<Role?> GetByIdAsync(int RoleId);
+        Task<Role?> GetByNameAsync(string name);
         Task<Role> CreateAsync(Role role);
         Task UpdateAsync(Role role);
     }

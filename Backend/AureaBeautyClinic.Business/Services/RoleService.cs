@@ -35,5 +35,16 @@ namespace AureaBeautyClinic.Business.Services
 
         public async Task UpdateAsync(Role role) =>
             await _roleRepository.UpdateAsync(role);
+
+        public async Task<RoleDTO?> DeactivateAsync(int RoleId)
+        {
+            var existing = await _roleRepository.GetByIdAsync(RoleId);
+            if (existing is null) return null;
+
+            existing.IsActive = false;
+            await _roleRepository.UpdateAsync(existing);
+
+            return existing.ToDto();
+        }
     }
 }

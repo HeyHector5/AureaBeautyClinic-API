@@ -35,5 +35,16 @@ namespace AureaBeautyClinic.Business.Services
 
         public async Task UpdateAsync(Specialty specialty) =>
             await _specialtyRepository.UpdateAsync(specialty);
+
+        public async Task<SpecialtyDTO?> DeactivateAsync(int SpecialtyId)
+        {
+            var existing = await _specialtyRepository.GetByIdAsync(SpecialtyId);
+            if (existing is null) return null;
+
+            existing.IsActive = false;
+            await _specialtyRepository.UpdateAsync(existing);
+
+            return existing.ToDto();
+        }
     }
 }

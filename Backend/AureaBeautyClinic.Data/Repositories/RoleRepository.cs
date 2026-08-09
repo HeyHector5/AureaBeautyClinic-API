@@ -20,6 +20,11 @@ namespace AureaBeautyClinic.Data.Repositories
         public async Task<Role?> GetByIdAsync(int RoleId) =>
             await _context.Roles.FindAsync(RoleId);
 
+        // La comparación la resuelve SQL Server, cuya colación por defecto
+        // no distingue mayúsculas de minúsculas.
+        public async Task<Role?> GetByNameAsync(string name) =>
+            await _context.Roles.FirstOrDefaultAsync(r => r.Name == name);
+
         public async Task<Role> CreateAsync(Role role)
         {
             await _context.Roles.AddAsync(role);

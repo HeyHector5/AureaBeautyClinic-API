@@ -11,5 +11,6 @@ namespace AureaBeautyClinic.Shared.Interfaces.IServices
         Task<IEnumerable<AppointmentDTO>> GetByDoctorIdAsync(int DoctorId);
         Task<AppointmentDTO> CreateAsync(Appointment appointment);
         Task UpdateAsync(Appointment appointment);
+        Task<AppointmentDTO?> CancelAsync(int AppointmentId);
     }
 }

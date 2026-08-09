@@ -20,8 +20,9 @@ namespace AureaBeautyClinic.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<ApiResponse<AuthResponse>>> Register([FromBody] RegisterRequest request)
         {
+            // El rol no se acepta desde el cliente: el registro público siempre crea
+            // un paciente. Las cuentas de Admin/Doctor se crean con POST /api/users.
             var result = await _authService.RegisterAsync(
-                request.RoleId,
                 request.Name,
                 request.LastName,
                 request.Email,

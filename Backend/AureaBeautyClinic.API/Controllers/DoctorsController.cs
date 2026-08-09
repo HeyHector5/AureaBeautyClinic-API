@@ -3,6 +3,7 @@ using AureaBeautyClinic.Shared.Common;
 using AureaBeautyClinic.Shared.DTOs;
 using AureaBeautyClinic.Shared.Entities;
 using AureaBeautyClinic.Shared.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AureaBeautyClinic.API.Controllers
@@ -36,6 +37,7 @@ namespace AureaBeautyClinic.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<DoctorDTO>>> Create([FromBody] CreateDoctorRequest request)
         {
             var doctor = new Doctor
@@ -54,6 +56,7 @@ namespace AureaBeautyClinic.API.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<DoctorDTO>>> Update(int id, [FromBody] UpdateDoctorRequest request)
         {
             var existing = await _doctorService.GetByIdAsync(id);
@@ -72,15 +75,22 @@ namespace AureaBeautyClinic.API.Controllers
             };
             await _doctorService.UpdateAsync(doctor);
 
-            var updated = existing with
-            {
-                SpecialtyId = request.SpecialtyId,
-                licenseNumber = request.LicenseNumber,
-                biography = request.Biography,
-                photoURL = request.PhotoURL,
-                isActive = request.IsActive
-            };
-            return Ok(ApiResponse<DoctorDTO>.Ok(updated, "Doctor updated successfully."));
+            var updated = await _doctorService.GetByIdAsync(id);
+            return Ok(ApiResponse<DoctorDTO>.Ok(updated!, "Doctor updated successfully."));
+        }
+
+        /// <summary>
+        /// Soft delete: marca el doctor como inactivo. La fila nunca se elimina.
+        /// </summary>
+        [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ApiResponse<DoctorDTO>>> Deactivate(int id)
+        {
+            var deactivated = await _doctorService.DeactivateAsync(id);
+            if (deactivated is null)
+                return NotFound(ApiResponse<DoctorDTO>.Fail($"Doctor with ID {id} was not found."));
+
+            return Ok(ApiResponse<DoctorDTO>.Ok(deactivated, "Doctor deactivated successfully."));
         }
     }
 }

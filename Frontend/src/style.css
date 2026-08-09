@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+/*
+  Tokens de marca de Aurea Beauty Clinic.
+
+  En Tailwind v4 el archivo tailwind.config.js ya no se autodescubre: los tokens
+  se declaran aquí con @theme y Tailwind genera las utilidades correspondientes
+  (bg-aurea, text-aurea, ring-aurea, border-aurea, font-display, ...).
+*/
+@theme {
+  --color-aurea: #ff3b30;
+  --color-aurea-dark: #e0342a;
+  --color-aurea-tint: #fff1f0;
+
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-body: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  /* Entrada suave reutilizada por el hero y las secciones del panel. */
+  .animate-fade-in-up {
+    opacity: 0;
+    animation: fadeInUp 1s ease-out forwards;
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

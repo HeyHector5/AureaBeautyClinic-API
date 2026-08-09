@@ -8,5 +8,12 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    // Abre el navegador automáticamente al ejecutar `npm run dev`.
+    open: true,
+    // El backend sólo permite este origen en su política de CORS.
+    port: 5173,
+    strictPort: true
   }
 })

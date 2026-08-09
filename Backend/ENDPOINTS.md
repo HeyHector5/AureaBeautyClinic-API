@@ -31,6 +31,52 @@ Los endpoints marcados con 🔒 requieren el header:
 Authorization: Bearer <token>
 ```
 
+### Matriz de autorización
+
+| Recurso | GET (lectura) | POST / PUT / DELETE |
+|---|---|---|
+| `/api/auth/*` | anónimo | anónimo |
+| `/api/roles` | anónimo | 🔒 sólo `Admin` |
+| `/api/specialties` | anónimo | 🔒 sólo `Admin` |
+| `/api/doctors` | anónimo | 🔒 sólo `Admin` |
+| `/api/users` | 🔒 `GET /` sólo `Admin`; `GET /{id}` el propio usuario o `Admin` | 🔒 `POST`/`DELETE` sólo `Admin`; `PUT` el propio usuario o `Admin` |
+| `/api/appointment` | 🔒 `GET /` sólo `Admin`; `GET /user/{id}` el propio usuario o `Admin`; el resto autenticado | 🔒 `POST` autenticado (sólo para sí mismo salvo `Admin`); `PUT` sólo `Admin`; `DELETE` el dueño de la cita o `Admin` |
+
+Los GET públicos de roles, especialidades y doctores alimentan el sitio web sin sesión.
+Un usuario no-Admin que edita su propio perfil no puede modificar `isActive`.
+
+---
+
+## Borrado: siempre soft delete
+
+**Ningún endpoint elimina filas.** `DELETE /api/{recurso}/{id}` marca el registro como
+inactivo y devuelve el DTO actualizado dentro del sobre `ApiResponse` habitual.
+
+| Recurso | Efecto de `DELETE` |
+|---|---|
+| `/api/users/{id}` | `isActive = false` |
+| `/api/doctors/{id}` | `isActive = false` |
+| `/api/specialties/{id}` | `isActive = false` |
+| `/api/roles/{id}` | `isActive = false` |
+| `/api/appointment/{id}` | `state = "Cancelled"` |
+
+> `RoleDTO` incluye ahora el campo `isActive`. Las bases creadas antes de este cambio
+> necesitan ejecutar `Database/AlterRoles_AddIsActive.sql` una sola vez.
+
+Endpoints añadidos en esta versión:
+
+- `POST /api/users` — crear un usuario con rol arbitrario sin pasar por `/api/auth/register`
+  (sólo `Admin`). Body: `{ roleId, name, lastName, email, password, phone? }`, contraseña de 8–100 caracteres.
+- `DELETE` en los cinco recursos, con la semántica de la tabla anterior.
+
+Correcciones de comportamiento:
+
+- `POST /api/doctors` y `POST /api/appointment` releen la entidad recién creada antes de
+  mapearla, así que ya devuelven `201` con las navegaciones (`user`, `specialty`, `doctor`)
+  pobladas en vez de fallar con `500`.
+- Las respuestas de `PUT` se releen de la base en lugar de parchear el DTO previo en memoria,
+  por lo que los objetos anidados ya no llegan desactualizados.
+
 ---
 
 ## 🔐 Auth
